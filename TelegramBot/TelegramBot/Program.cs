@@ -16,10 +16,13 @@ namespace TelegramBot
         private static TelegramBotClient client;
 
         private static CommandHandler handler;
+        private static Dictionary<string, CommandHandler> handlers;
 
         static void Main(string[] args)
         {
             client = new TelegramBotClient(token);
+
+            handlers = new Dictionary<string, CommandHandler>();
 
             var end = new UnknowenCommandHandler();
 
@@ -28,9 +31,22 @@ namespace TelegramBot
 
             var handler3 = new GetButtonCommandHandler("Информация по договору", ConstNameButton.names["Информация по договору"], handler2);
 
+            var handler4 = new ApiCommandHandler("Тип, энергия, пробег в кремнии", end);
+            var handler5 = new ApiCommandHandler("Выработанное время на ионе по каждому договору", handler4);
+            var handler6 = new ApiCommandHandler("Время затраченное на технологические перерывы и простои", handler5);
 
-            handler = new GetButtonCommandHandler("кнопки", ConstNameButton.names.Keys, handler3);
-          
+            var handler7 = new GetButtonCommandHandler("Информация по иону", ConstNameButton.names["Информация по иону"], handler6);
+
+            var handler8 = new ApiCommandHandler("№ сеанса и его статус", end);
+            var handler9 = new ApiCommandHandler("Время начала данного сеанса", handler8);
+            var handler10 = new ApiCommandHandler("№ договора", handler9);
+
+            var handler11 = new GetButtonCommandHandler("Текущее состояние", ConstNameButton.names["Текущее состояние"], handler10);
+
+            handlers.Add("Информация по договору", handler3);
+            handlers.Add("Информация по иону", handler7);
+            handlers.Add("Текущее состояние", handler11);
+            handlers.Add("default", end);
 
             Console.WriteLine("Запущен бот " + client.GetMeAsync().Result.FirstName); //проверка запущен ли бот
 
@@ -52,32 +68,19 @@ namespace TelegramBot
         public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update)); //данные о консоли(удоли)
+            Console.WriteLine();
+
 
             var message = update.Message;
-            await handler.HandleCommand(botClient, update);
+            var activeHandler = handlers["default"];
 
-            //if (ConstNameButton.names.ContainsKey(message.Text))
-            //{
-            //    await botClient.SendTextMessageAsync(message.Chat.Id, "Команда выполнена", replyMarkup: GetButtons(ConstNameButton.names[message.Text]));
-            //}
-            //else
-            //{
-            //    await botClient.SendTextMessageAsync(message.Chat.Id, message.Text, replyMarkup: GetButtons(ConstNameButton.names.Keys));
-            //}
-        }
-
-        private static IReplyMarkup GetButtons(IEnumerable<string> names)
-        {
-            var keyboard = new List<List<KeyboardButton>>();
-
-            foreach (var item in names)
+            if (handlers.ContainsKey(message.Text))
             {
-                var keyboardButtons = new List<KeyboardButton>();
-                keyboard.Add(keyboardButtons);
-                keyboardButtons.Add(new KeyboardButton(item));
+                activeHandler = handlers[message.Text];
             }
 
-            return new ReplyKeyboardMarkup(keyboard);
+            handler = new GetButtonCommandHandler("кнопки", ConstNameButton.names.Keys, activeHandler);
+            await handler.HandleCommand(botClient, update);
         }
 
         public static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
