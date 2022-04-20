@@ -11,8 +11,8 @@
         public int SessionNumberInYear { get; set; }
         public float SurfaceEnergyOfTestObject { get; set; }
         public float EnergyErrorOfTestObjecе { get; set; }
-        public float Odometry { get; set; }
-        public float ErrorOdometry { get; set; }
+        public float DistanceSI { get; set; }
+        public float DestanceErrorSI { get; set; }
         public float LPE { get; set; }
         public float ErrorLPE { get; set; }
         public float IonConductorEnergy { get; set; }

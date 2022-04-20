@@ -9,7 +9,7 @@ namespace WebApi.Services
 {
     public interface IIonInfoService 
     {
-        
+        IEnumerable<IonShortInfo> GetIonShortInfo();
     }
 
     public class IonInfoServices : IIonInfoService
@@ -20,5 +20,16 @@ namespace WebApi.Services
             _provider = provider;
         }
 
+        public IEnumerable<IonShortInfo> GetIonShortInfo() 
+        {
+            var data = _provider.GetData();
+            return data.Select(x => new IonShortInfo()
+            {
+                IonName = x.IonName,
+                Isotope = x.Isotope,
+                DistanceSI = x.DistanceSI,
+                DestanceErrorSI = x.DestanceErrorSI
+            });
+        }
     }
 }

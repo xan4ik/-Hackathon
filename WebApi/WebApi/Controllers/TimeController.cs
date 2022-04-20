@@ -19,5 +19,48 @@ namespace WebApi.Controllers
         {
             _service = service;
         }
+
+        [HttpGet("ion_time")]
+        public IActionResult CountTotalTimeByIon() 
+        {
+            var result = _service.CountTotalTimeByIon();
+            return Ok(result);
+        }
+
+
+        [HttpGet("session_report")]
+        public IActionResult GetSessionReport(int sessionNumber)
+        {
+            var result = _service.GetSessionReport(sessionNumber);
+            return Ok(result);
+        }
+
+        [HttpGet("session_begin")]
+        public IActionResult GetSessionBegin(int sessionNumber)
+        {
+            var result = _service.GetSessionBegin(sessionNumber);
+            return Ok(result);
+        }
+
+        [HttpGet("contracts_begin")]
+        public IActionResult GetContractsBegin()
+        {
+            var result = _service.GetContractsBegin();
+            return Ok(result);
+        }
+
+        [HttpGet("totalTB")]
+        public IActionResult GetTBTotalTime()
+        {
+            var result = _service.GetTBTotalTime();
+            return Ok(result);
+        }
+
+        [HttpGet("contracts_timework")]
+        public IActionResult GetContractTimeWorksByIonName(string ionName) 
+        {
+            var result = _service.GetContractTimeWorksByIonName(ionName);
+            return Ok(result);
+        }
     }
 }

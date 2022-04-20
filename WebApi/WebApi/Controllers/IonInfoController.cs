@@ -19,5 +19,12 @@ namespace WebApi.Controllers
         {
             _service = service;
         }
+
+        [HttpGet]
+        public IActionResult GetIonShortInfo() 
+        {
+            var result = _service.GetIonShortInfo();
+            return Ok(result);
+        }
     }
 }

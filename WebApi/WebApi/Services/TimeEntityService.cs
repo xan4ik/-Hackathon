@@ -9,22 +9,17 @@ namespace WebApi.Services
 {
     public interface ITimeEntityService 
     {
-        
+        SessionReport GetSessionReport(int sessionNumber);
+        DateTime GetSessionBegin(int sessionNumber);
+        IEnumerable<ContractBegin> GetContractsBegin();
+        IEnumerable<TotalTimeByIon> CountTotalTimeByIon();
+        TimeSpan GetTBTotalTime();
+        IEnumerable<ContractTimeWork> GetContractTimeWorksByIonName(string ionName);
     }
 
-    public struct TotalTimeByIon 
-    {
-        public string IonName;
-        public TimeSpan TotalTime;
-    }
-
-    public struct SessionReport 
-    {
-        public int SessionNumber;
-        public string Status;
-    }
 
     //TODO: проверки на null и прочее
+    //TODO: организация "-"
     public class TimeEntityService : ITimeEntityService
     {
         private IDataProvider<TimeEntity> _provider; 
@@ -42,8 +37,7 @@ namespace WebApi.Services
                             IonName = x.Key,
                             TotalTime = new TimeSpan(x.Sum(v => v.TotalTime.Ticks))
                         });
-        }
-
+        }        
 
         public SessionReport GetSessionReport(int sessionNumber) 
         {
@@ -70,6 +64,36 @@ namespace WebApi.Services
         {
             var session = _provider.GetData().First(x => x.Id == sessionNumber);
             return session.SessionBegin;
+        }
+
+        public IEnumerable<ContractBegin> GetContractsBegin() 
+        {
+            var data = _provider.GetData();
+
+            return data.GroupBy(x => x.Organization)
+                       .Select(x => new ContractBegin()
+                       {
+                           CompanyName = x.Key,
+                           WorkBegin = x.Min(v => v.SessionBegin)
+                       });
+        }
+
+        public TimeSpan GetTBTotalTime()
+        {
+            var data = _provider.GetData();
+            return new TimeSpan(data.Sum(x => x.TbSpan.Ticks));
+        }
+
+        public IEnumerable<ContractTimeWork> GetContractTimeWorksByIonName(string ionName) 
+        {
+            var data = _provider.GetData();
+            return data.Where(x => x.IonName == ionName)
+                       .GroupBy(x => x.Organization)
+                       .Select(x => new ContractTimeWork()
+                       {
+                           CompanyName = x.Key,
+                           TotalTimeSpan = new TimeSpan(x.Sum(v=>v.TimeWithTB.Ticks))
+                       });
         }
     }
 }
