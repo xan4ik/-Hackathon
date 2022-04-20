@@ -6,6 +6,7 @@ namespace Domain
     {
         public int Id { get; set; } // номер строки в документе
         public string Organization { get; set; }
+        public string IonName { get; set; }
         public DateTime SessionBegin { get; set; }
         public DateTime SessionEnd { get; set; }
         public TimeSpan ExposureSpan { get; set; }
