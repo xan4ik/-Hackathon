@@ -12,7 +12,7 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class DataController : ControllerBase
-    {
+    { 
         private IDataEntityService _service;
 
         public DataController(IDataEntityService service)

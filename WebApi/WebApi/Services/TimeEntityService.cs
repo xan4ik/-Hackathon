@@ -43,11 +43,11 @@ namespace WebApi.Services
         {
             string GetSessionStatus(TimeEntity entity) 
             {
-                if (entity.SessionBegin < DateTime.Now)
+                if (entity.SessionBegin > DateTime.Now)
                     return "Сеанс ожидает начала";
-                else if (DateTime.Now >= entity.SessionBegin && DateTime.Now <= entity.SessionEnd)
+                else if (DateTime.Now >= entity.SessionBegin && (entity.SessionEnd == new DateTime(0) || DateTime.Now <= entity.SessionEnd))
                     return "Сеанс в процессе выполнения";
-                else if (DateTime.Now >= entity.SessionEnd)
+                else if (entity.SessionEnd < DateTime.Now )
                     return "Сеанс завершился";
                 return "Состояния сеанса не установленно";
             }

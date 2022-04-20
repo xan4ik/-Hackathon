@@ -28,7 +28,7 @@ namespace WebApi.Services
                 IonName = x.IonName,
                 Isotope = x.Isotope,
                 DistanceSI = x.DistanceSI,
-                DestanceErrorSI = x.DestanceErrorSI
+                DestanceErrorSI = x.DistanceErrorSI
             });
         }
     }
