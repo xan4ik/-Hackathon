@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApi.DataProviders;
 using Domain;
+using Domain.DTO;
+
 
 namespace WebApi.Services
 {
