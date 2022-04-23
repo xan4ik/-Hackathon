@@ -15,29 +15,32 @@ namespace TelegramBot
         private static string token = "5332022872:AAHDxLUT0ZRxH8KsjUlLtloE68WDAKgTiVM";
         private static TelegramBotClient client;
 
-        private static CommandHandler handler;
-        private static Dictionary<string, CommandHandler> handlers;
+        private static CommandHandler root;
+        private static CommandHandler lastActive;
+
+        //private static CommandHandler handler;
+        //private static Dictionary<string, CommandHandler> handlers;
 
         static void Main(string[] args)
         {
             client = new TelegramBotClient(token);
 
-            handlers = new Dictionary<string, CommandHandler>();
+            var handlers = new Dictionary<string, CommandHandler>();
 
-            var end = new UnknowenCommandHandler();
+            //var end = new UnknowenCommandHandler();
 
-            var handler1 = new ApiCommandHandler("Общее время работы с разбивкой по ионам", end);
+            var handler1 = new ApiCommandHandler("Общее время работы с разбивкой по ионам");
             var handler2 = new ApiCommandHandler("Время начала работ по договору", handler1);
 
             var handler3 = new GetButtonCommandHandler("Информация по договору", ConstNameButton.names["Информация по договору"], handler2);
 
-            var handler4 = new ApiCommandHandler("Тип, энергия, пробег в кремнии", end);
+            var handler4 = new ApiCommandHandler("Тип, энергия, пробег в кремнии");
             var handler5 = new ApiCommandHandler("Выработанное время на ионе по каждому договору", handler4);
             var handler6 = new ApiCommandHandler("Время затраченное на технологические перерывы и простои", handler5);
 
             var handler7 = new GetButtonCommandHandler("Информация по иону", ConstNameButton.names["Информация по иону"], handler6);
 
-            var handler8 = new ApiCommandHandler("№ сеанса и его статус", end);
+            var handler8 = new ApiCommandHandler("№ сеанса и его статус");
             var handler9 = new ApiCommandHandler("Время начала данного сеанса", handler8);
             var handler10 = new ApiCommandHandler("№ договора", handler9);
 
@@ -46,7 +49,11 @@ namespace TelegramBot
             handlers.Add("Информация по договору", handler3);
             handlers.Add("Информация по иону", handler7);
             handlers.Add("Текущее состояние", handler11);
-            handlers.Add("default", end);
+            //handlers.Add("/start", )
+            //handlers.Add("default", end);
+
+            root = new BranchCommand(handlers);
+            lastActive = root;
 
             Console.WriteLine("Запущен бот " + client.GetMeAsync().Result.FirstName); //проверка запущен ли бот
 
@@ -67,20 +74,63 @@ namespace TelegramBot
 
         public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update)); //данные о консоли(удоли)
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update)); //данные в консоли(удоли)
             Console.WriteLine();
 
 
-            var message = update.Message;
-            var activeHandler = handlers["default"];
-
-            if (handlers.ContainsKey(message.Text))
+            try
             {
-                activeHandler = handlers[message.Text];
+                lastActive = root.FindHandler(update.Message.Text);
+                await lastActive.Handle(botClient, update);
+
+            }
+            catch (Exception e) 
+            {
+                lastActive = root;
+                await new UnknowenCommandHandler().Handle(botClient, update);
+            }
+            //var message = update.Message;
+            //var activeHandler = handlers["default"];
+
+            //if (handlers.ContainsKey(message.Text))
+            //{
+            //    activeHandler = handlers[message.Text];
+            //}
+            //else if(SearchBool(message.Text))
+            //{
+            //    activeHandler = handlers[Search(message.Text)];
+            //}
+
+           // handler = new GetButtonCommandHandler("кнопки", ConstNameButton.names.Keys, activeHandler);
+            //await handler.HandleCommand(botClient, update);
+        }
+
+        private static bool SearchBool(string message)
+        {
+            if(Search(message)!="")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private static string Search(string message)
+        {
+            foreach (var item in ConstNameButton.names)
+            {
+                foreach (var i in item.Value)
+                {
+                    if(i.Contains(message))
+                    {
+                        return item.Key;
+                    }
+                }
             }
 
-            handler = new GetButtonCommandHandler("кнопки", ConstNameButton.names.Keys, activeHandler);
-            await handler.HandleCommand(botClient, update);
+            return "";
         }
 
         public static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
@@ -101,6 +151,7 @@ namespace TelegramBot
             names.Add("Информация по договору", new List<string> { "Общее время работы с разбивкой по ионам", "Время начала работ по договору" });
             names.Add("Информация по иону", new List<string> { "Тип, энергия, пробег в кремнии", "Выработанное время на ионе по каждому договору", "Время затраченное на технологические перерывы и простои" });
             names.Add("Текущее состояние", new List<string> { "№ сеанса и его статус", "Время начала данного сеанса", "№ договора" });
+            names.Add("Добавить информацию", new List<string> { "Таблица <<Data>>", "Таблица <<Timing>>", "Таблица <<Информация по иону>>" });
         }
     }
 
@@ -117,42 +168,29 @@ namespace TelegramBot
         public CommandHandler()
         { }
 
-        public Task HandleCommand(ITelegramBotClient botClient, Update command)
+        public CommandHandler FindHandler(string command)
         {
             if (CanHandle(command))
             {
-                return OnHnadle(botClient, command);
+                return GetHandler(command);
+                //return OnHnadle(botClient, command);
             }
             else
             {
-                if (next == null) 
+                if (next == null)
                 {
                     throw new Exception("Unknown command");
                 }
-                return next.HandleCommand(botClient, command);
+                return next.FindHandler(command);
             }
         }
 
-        protected abstract bool CanHandle(Update command);
-        protected abstract Task OnHnadle(ITelegramBotClient botClient, Update command);
-    }
-
-    class UnknowenCommandHandler : CommandHandler
-    {
-        protected override bool CanHandle(Update command)
+        protected virtual CommandHandler GetHandler(string command)
         {
-            return true;
+            return this;
         }
 
-        protected override Task OnHnadle(ITelegramBotClient botClient, Update command)
-        {
-            var chatID = command.Message.Chat.Id;
-            var messageText = "Не известна команда " + command.Message.Text;
-
-            return botClient.SendTextMessageAsync(chatID, messageText, replyMarkup: GetButtons(ConstNameButton.names.Keys));
-        }
-
-        private static IReplyMarkup GetButtons(IEnumerable<string> names)
+        public IReplyMarkup GetButtons(IEnumerable<string> names)
         {
             var keyboard = new List<List<KeyboardButton>>();
 
@@ -165,6 +203,26 @@ namespace TelegramBot
 
             return new ReplyKeyboardMarkup(keyboard);
         }
+
+        public abstract bool CanHandle(string command);
+        public abstract Task Handle(ITelegramBotClient botClient, Update command);
+    }
+
+    
+    class UnknowenCommandHandler : CommandHandler
+    {
+        public override bool CanHandle(string command)
+        {
+            return true;
+        }
+
+        public override Task Handle(ITelegramBotClient botClient, Update command)
+        {
+            var chatID = command.Message.Chat.Id;
+            var messageText = "Не известна команда " + command.Message.Text;
+
+            return botClient.SendTextMessageAsync(chatID, messageText, replyMarkup: GetButtons(ConstNameButton.names.Keys));
+        }
     }
 
     class ApiCommandHandler : CommandHandler
@@ -175,12 +233,17 @@ namespace TelegramBot
             this.command = command;
         }
 
-        protected override bool CanHandle(Update command)
+        public ApiCommandHandler(string command) 
         {
-            return this.command == command.Message.Text;
+            this.command = command;
         }
 
-        protected override Task OnHnadle(ITelegramBotClient botClient, Update command)
+        public override bool CanHandle(string command)
+        {
+            return this.command == command;
+        }
+
+        public override Task Handle(ITelegramBotClient botClient, Update command)
         {
             var chatID = command.Message.Chat.Id;
             var messageText = "выполнено  " + command.Message.Text;
@@ -188,6 +251,8 @@ namespace TelegramBot
             return botClient.SendTextMessageAsync(chatID, messageText);
         }
     }
+
+
 
     class GetButtonCommandHandler : CommandHandler
     {
@@ -200,32 +265,51 @@ namespace TelegramBot
             this.command = command;
         }
 
-        protected override bool CanHandle(Update command)
+        public override bool CanHandle(string command)
         {
-            return this.command == command.Message.Text;
+            return this.command == command;
         }
 
-        protected override Task OnHnadle(ITelegramBotClient botClient, Update command)
+        public override Task Handle(ITelegramBotClient botClient, Update command)
         {
             var chatID = command.Message.Chat.Id;
             var messageText = "выполнено";
 
             return botClient.SendTextMessageAsync(chatID, messageText, replyMarkup: GetButtons(result));
         }
-
-        private static IReplyMarkup GetButtons(IEnumerable<string> names)
-        {
-            var keyboard = new List<List<KeyboardButton>>();
-
-            foreach (var item in names)
-            {
-                var keyboardButtons = new List<KeyboardButton>();
-                keyboard.Add(keyboardButtons);
-                keyboardButtons.Add(new KeyboardButton(item));
-            }
-
-            return new ReplyKeyboardMarkup(keyboard);
-        }
     }
 
+
+    class BranchCommand : CommandHandler    
+    {
+        private Dictionary<string, CommandHandler> branches;
+
+        public BranchCommand(Dictionary<string, CommandHandler> handlers)
+        {
+            branches = handlers;
+        }
+
+        public override bool CanHandle(string command)
+        {
+            foreach (var item in branches.Keys)
+            {
+                if(branches[item].CanHandle(command))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        protected override CommandHandler GetHandler(string command)
+        {
+            return branches[command];
+        }
+
+        public override Task Handle(ITelegramBotClient botClient, Update command)
+        {
+            throw new Exception("I'm branch!");
+        }
+    }
 }
