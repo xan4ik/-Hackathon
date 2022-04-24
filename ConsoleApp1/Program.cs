@@ -1,6 +1,7 @@
 ﻿using Command;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
@@ -17,7 +18,7 @@ namespace ConsoleApp1
         {
             Console.WriteLine("Hello World!");
 
-            var invoker = new CommandInvoker();
+            var invoker = new ApiShell();
 
             var profile = new UserProfile()
             {
@@ -27,36 +28,25 @@ namespace ConsoleApp1
             };
 
 
-            Console.WriteLine(JsonSerializer.Serialize(new TotalTimeByIon() 
-            {
-                IonName = "asdas",
-                TotalTime = 1000
-            }));
-
-            var ss = JsonSerializer.Deserialize<TotalTimeByIon>(JsonSerializer.Serialize(new TotalTimeByIon()
-            {
-                IonName = "asdas",
-                TotalTime = 1000
-            }));
-
-            Console.WriteLine(ss.TotalTime);
-
-
             invoker.TrySignInAsync(profile).Wait();
 
-            var result1 = invoker.GetIonTotalTimeUsingAsync().Result;
-            foreach (var item in result1)
-            {
-                Console.WriteLine(item.IonName + " " + item.TotalTime);
-            }
 
+
+            var res = invoker.GetContractsBegins().Result.ToArray();
             Console.WriteLine();
-            
-            var result2 = invoker.GetIonShortInfoAsync().Result;
-            foreach (var item in result2)
-            {
-                Console.WriteLine(item.IonName + " " + item.Isotope);
-            }
+            //var result1 = invoker.GetIonTotalTimeUsingAsync().Result;
+            //foreach (var item in result1)
+            //{
+            //    Console.WriteLine(item.IonName + " " + item.TotalTime);
+            //}
+
+            //Console.WriteLine();
+
+            //var result2 = invoker.GetIonShortInfoAsync().Result;
+            //foreach (var item in result2)
+            //{
+            //    Console.WriteLine(item.IonName + " " + item.Isotope);
+            //}
 
 
             invoker.TrySignOutAsync().Wait();
