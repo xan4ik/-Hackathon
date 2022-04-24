@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 11pt;
+            color: black;
+            -webkit-box-sizing: border-box;
+        }
+        tab1 {
+            padding-left: 15em;
+        }
+        h1{
+            font-size: 16pt;
+            font-style: bold;
+            text-align: center;
+        }
+        h3{
+            font-size: 12pt;
+            font-style: bold;
+        }
+        h2{
+            font-size: 14pt;
+            text-align: right;
+            font-weight:normal;
+        }
+        table,td,th{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        td,th{
+            padding: 5px;
+            text-align:center;
+        }
+        .flexrow {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            flex-direction: row;
+            -webkit-flex-direction: row;
+            justify-content: space-between;
+            -webkit-justify-content: space-between;
+            -webkit-box-pack: justify;
+        }
+        .col {
+            display: flex;
+            display: -webkit-flex;
+            flex-direction: column;
+            -webkit-flex-direction: column;
+        }
+    </style>
+    <title>Нестандарстный протокол</title>
+</head>
+<body>
+    <h1>Протокол мониторинга характеристик потока ионов сеанса</h1>
+    <h2>ТЗЧ/2021-Ne-18/18-187</h2>
+    <h3 style="text-align:right">Сеанc №_seans-number_</h3>
+    <h3>1. Общие сведения о сеансе:</h3>
+    <p>Испытательный ионный комплекс : ИИК 10К-400</p>
+    <table>
+        <tr>
+            <th>Название организации</th>
+            <th>Шифр или наименование работы</th>
+            <th>Облучаемое изделие</th>
+            <th>Время начала облучения</th>
+            <th>Длительность</th>
+        </tr>
+        <tr>
+            <td>_org_name_</td>
+            <td>_work_cipher_</td>
+            <td>_irradiated_item_</td>
+            <td>_irradiation_start_time_</td>
+            <td>_duration_</td>
+        </tr>
+    </table>
+    <h3>2. Условия эксперемента: в среде вакуум</h3>
+    <table>
+        <tr>
+            <th>Угол</th>
+            <th>Температура,°C</th>
+            <th>Материал дегрейдора</th>
+            <th>Толщина, мкм</th>
+        </tr>
+        <tr>
+            <td>_angle_</td>
+            <td>_temperature_</td>
+            <td>_degreydor_material_</td>
+            <td>_sickness_</td>
+        </tr>
+    </table>
+    <h3>3.Характеристики потока ионов:</h3>
+    <p>Характеристики иона:</p>
+    <table>
+        <tr>
+            <th>Тип иона</th>
+            <th>Энергия Е на поверхности, МэВ/н</th>
+            <th>Пробег, R [Si], мкм</th>
+            <th>Линейные потери энергии ЛПЭ, МэВ×см2/мг [Si]</th>
+        </tr>
+        <tr>
+            <td>_ion_type_</td>
+            <td>_energy_</td>
+            <td>_mileage_</td>
+            <td>_linear_loss_</td>
+        </tr>
+    </table>
+    <p>Данные по пропорциональным счетчикам:</p>
+    <div class="flexrow">
+        <table>
+            <tr>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>Среднее значение</th>
+            </tr>
+            <tr>
+                <td>_1_</td>
+                <td>_2_</td>
+                <td>_3_</td>
+                <td>_4_</td>
+                <td>_avg_</td>
+            </tr>
+        </table>
+        <div class="col">
+            <p>Расчетный коэффициент К =_k_estimated_±_kerror_</p>
+            <p>(протокол допуска №  _protocol_n_)</p>
+            <p>Фактический коэффициент К= _k_actual_</p>
+        </div>
+    </div>
+    <h3>Данные по трековым мембранам из лавсановой пленки:</h3>
+    <div class="flexrow">
+        <table>
+            <tr>
+                <th>Детектор 1</th>
+                <th>Детектор 2</th>
+                <th>Детектор 3</th>
+                <th>Детектор 4</th>
+                <th>Детектор 5</th>
+                <th>Детектор 6</th>
+            </tr>
+            <tr>
+                <td>_det1_</td>
+                <td>_det2_</td>
+                <td>_det3_</td>
+                <td>_det4_</td>
+                <td>_det5_</td>
+                <td>_det6_</td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td colspan="2">Неоднородность, %</td>
+            </tr>
+            <tr>
+                <td>по лев.</td>
+                <td>по прав.</td>
+            </tr>
+            <tr>
+                <td>_left_</td>
+                <td>_right_</td>
+            </tr>
+        </table>
+    </div>
+    <br /><br /><br /><br />
+    <div class="flexrow">
+        <div class="col">
+            <p>Ответственный за проведение испытаний <br /> в испытательную смену от ООО"НПП"Детектор"</p>
+            <br />
+            <p>__________________________ (<tab1>)</tab1></p>
+        </div>
+        <div class="col">
+            <p>Технический директор  ООО"НПП"Детектор"</p>
+            <br />
+            <p>__________________________ (<tab1>)</tab1></p>
+        </div>
+    </div>
+</body>
+</html>
