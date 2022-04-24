@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Domain.DTO
+namespace WebApi.DTO
 {
     public struct ContractBegin 
     {

@@ -6,11 +6,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 using WebApi.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
+
+    //TODO: доделать инфу по последнему сеансу
+
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TimeController : ControllerBase
     {
         private ITimeEntityService _service;
@@ -29,7 +34,7 @@ namespace WebApi.Controllers
 
 
         [HttpGet("session_report")]
-        public IActionResult GetSessionReport(int sessionNumber)
+        public IActionResult GetSessionReport([FromBody] int sessionNumber)
         {
             var result = _service.GetSessionReport(sessionNumber);
             return Ok(result);

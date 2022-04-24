@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Domain.DTO
+namespace WebApi.DTO
 {
     public struct ContractTimeWork 
     {
         public string CompanyName { get; set; }
-        public TimeSpan TotalTimeSpan { get; set; }
+        public long TotalTimeSpan { get; set; }
     }
 }

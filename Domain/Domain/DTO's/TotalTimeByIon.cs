@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Domain.DTO
+namespace WebApi.DTO
 {
     public struct TotalTimeByIon 
     {
         public string IonName { get; set; }
-        public TimeSpan TotalTime { get; set; }
+        public long TotalTime { get; set; }
     }
 }

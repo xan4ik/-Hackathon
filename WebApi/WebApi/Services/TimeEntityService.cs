@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApi.DataProviders;
 using Domain;
-using Domain.DTO;
+using WebApi.DTO;
 
 namespace WebApi.Services
 {
@@ -14,7 +14,7 @@ namespace WebApi.Services
         DateTime GetSessionBegin(int sessionNumber);
         IEnumerable<ContractBegin> GetContractsBegin();
         IEnumerable<TotalTimeByIon> CountTotalTimeByIon();
-        TimeSpan GetTBTotalTime();
+        long GetTBTotalTime();
         IEnumerable<ContractTimeWork> GetContractTimeWorksByIonName(string ionName);
     }
 
@@ -36,7 +36,7 @@ namespace WebApi.Services
             return data.GroupBy(x => x.IonName)
                         .Select(x => new TotalTimeByIon(){ 
                             IonName = x.Key,
-                            TotalTime = new TimeSpan(x.Sum(v => v.TotalTime.Ticks))
+                            TotalTime = x.Sum(v => v.TotalTime.Ticks)
                         });
         }        
 
@@ -79,10 +79,10 @@ namespace WebApi.Services
                        });
         }
 
-        public TimeSpan GetTBTotalTime()
+        public long GetTBTotalTime()
         {
             var data = _provider.GetData();
-            return new TimeSpan(data.Sum(x => x.TbSpan.Ticks));
+            return data.Sum(x => x.TbSpan.Ticks);
         }
 
         public IEnumerable<ContractTimeWork> GetContractTimeWorksByIonName(string ionName) 
@@ -93,7 +93,7 @@ namespace WebApi.Services
                        .Select(x => new ContractTimeWork()
                        {
                            CompanyName = x.Key,
-                           TotalTimeSpan = new TimeSpan(x.Sum(v=>v.TimeWithTB.Ticks))
+                           TotalTimeSpan = x.Sum(v=>v.TimeWithTB.Ticks)
                        });
         }
     }

@@ -11,6 +11,9 @@ using Domain;
 using WebApi.DataProviders;
 using WebApi.Services;
 using WebApi.DataProviders.ProvidersCSV;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using WebApi.Controllers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi
 {
@@ -20,8 +23,6 @@ namespace WebApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-
             services.AddSingleton<IDataProvider<DataEntity>, DataEntityGoogleProvider>();
             services.AddSingleton<IDataProvider<TimeEntity>, TimeEntityCsvProvider>();
             services.AddSingleton<IDataProvider<IonInfo>, IonInfoCsvProvider>();
@@ -31,6 +32,21 @@ namespace WebApi
             services.AddTransient<IIonInfoService, IonInfoServices>();
 
             services.AddSwaggerGen();
+
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("Human", policy =>
+                {
+                    policy.RequireClaim("ProfileType", AuthController.HumanRole);
+                });
+            });
+
+
+            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +69,9 @@ namespace WebApi
 
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseAuthentication();    // аутентификация
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

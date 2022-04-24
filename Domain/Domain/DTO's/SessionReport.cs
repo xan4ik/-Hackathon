@@ -1,4 +1,4 @@
-﻿namespace Domain.DTO
+﻿namespace WebApi.DTO
 {
     public struct SessionReport 
     {

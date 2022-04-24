@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using WebApi.DataProviders;
 using Domain;
-using Domain.DTO;
+using WebApi.DTO;
 
 
 namespace WebApi.Services
