@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CommandDLL.Commands;
 
 namespace CommandDLL
 {
@@ -9,16 +10,19 @@ namespace CommandDLL
 
         public CommandContainer()
         {
-            commands = new Dictionary<string, ICommand>();
-
-            commands.Add("auth", new AuthenticateCommand());
-            commands.Add("ion_time", new IonTimeGetCommand());
-            commands.Add("ion_info", new IonShortInfoGetCommand());
-            commands.Add("session_report", new SessionReportGetCommand());
-            commands.Add("session_begin", new SessionBeginGetCommand());
-            commands.Add("total_tb", new TotalTechnicalBreakGetCommand());
-            commands.Add("contracts_timework", new ContractWorksByIonGetCommand());
-            commands.Add("contracts_begin", new ContractsBeginsGetCommand());
+            commands = new Dictionary<string, ICommand>
+            {
+                { "auth", new AuthenticateCommand() },
+                { "ion_time", new IonTimeGetCommand() },
+                { "ion_info", new IonShortInfoGetCommand() },
+                { "session_report", new SessionReportGetCommand() },
+                { "session_begin", new SessionBeginGetCommand() },
+                { "total_tb", new TotalTechnicalBreakGetCommand() },
+                { "contracts_timework", new ContractWorksByIonGetCommand() },
+                { "contracts_begin", new ContractsBeginsGetCommand() },
+                { "ion_names", new IonNamesGetCommand() },
+                { "session_count", new SessionCountGetCommand() }
+            };
         }
 
 

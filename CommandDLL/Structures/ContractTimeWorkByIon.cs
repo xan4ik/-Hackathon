@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommandDLL
+namespace CommandDLL.DTO
 {
     public struct ContractTimeWorkByIon
     {

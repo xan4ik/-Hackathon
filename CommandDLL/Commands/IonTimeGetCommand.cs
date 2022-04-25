@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using WebApi.DTO;
-using System.Text.Json;
+using Domain.DTO;
 using System.Threading.Tasks;
 using System.Linq;
+using CommandDLL.DTO;
 
-namespace CommandDLL
+namespace CommandDLL.Commands
 {
     public class IonTimeGetCommand : IGetCommand<IEnumerable<TotalIonTimeUsing>>, IGetCommand<string, TotalIonTimeUsing>
     {

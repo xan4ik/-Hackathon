@@ -1,16 +1,15 @@
+using WebAPI.DataProviders;
+using WebAPI.DataProviders.ProvidersCSV;
+using WebAPI.Services;
 using Domain;
-using WebApi.DataProviders;
-using WebApi.Services;
-using WebApi.DataProviders.ProvidersCSV;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using WebApi.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebAPI.Controllers;
 
-
-namespace WebApi
+namespace WebAPI
 {
     public class Startup
     {

@@ -2,11 +2,11 @@
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
-using WebApi.DTO;
+using Domain.DTO;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace CommandDLL
+namespace CommandDLL.Commands
 {
     public class AuthenticateCommand : IAuthenticateCommand
     {

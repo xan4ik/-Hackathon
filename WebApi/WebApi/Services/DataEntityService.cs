@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApi.DataProviders;
+using WebAPI.DataProviders;
 using Domain;
-using WebApi.DTO;
+using Domain.DTO;
 
-namespace WebApi.Services
+namespace WebAPI.Services
 {
     public interface IDataEntityService 
     {

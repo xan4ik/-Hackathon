@@ -1,11 +1,7 @@
 ﻿using Domain;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApi.Tools;
+using WebAPI.Tools;
 
-namespace WebApi.DataProviders.ProvidersCSV
+namespace WebAPI.DataProviders.ProvidersCSV
 {
     public class TimeEntityCsvProvider : CsvProvider<TimeEntity>
     {

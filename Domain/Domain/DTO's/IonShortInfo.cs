@@ -1,4 +1,4 @@
-﻿namespace WebApi.DTO
+﻿namespace Domain.DTO
 {
     public struct IonShortInfo 
     {

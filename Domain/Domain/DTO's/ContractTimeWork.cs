@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApi.DTO
+namespace Domain.DTO
 {
     public struct ContractTimeWork 
     {

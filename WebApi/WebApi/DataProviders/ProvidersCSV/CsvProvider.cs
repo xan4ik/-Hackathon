@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApi.DataProviders.ProvidersCSV
+namespace WebAPI.DataProviders.ProvidersCSV
 {
     public abstract class CsvProvider<T> : IDataProvider<T>
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using WebApi.DTO;
+using Domain.DTO;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-namespace CommandDLL
+namespace CommandDLL.Commands
 {
     public class ContractsBeginsGetCommand : IGetCommand<IEnumerable<ContractBegin>>
     {

@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-namespace CommandDLL
+namespace CommandDLL.Commands
 {
     public class SessionBeginGetCommand : IGetCommand<int, DateTime>
     {

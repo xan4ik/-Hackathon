@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Domain;
-using WebApi.DTO;
+using Domain.DTO;
+using WebAPI.DataProviders;
 
-
-namespace WebApi.Services
+namespace WebAPI.Services
 {
     public interface IIonInfoService 
     {

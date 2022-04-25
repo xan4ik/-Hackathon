@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using WebApi.DTO;
+using Domain.DTO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace CommandDLL
+namespace CommandDLL.Commands
 {
     public class IonShortInfoGetCommand : IGetCommand<IEnumerable<IonShortInfo>>, IGetCommand<string, IonShortInfo>
     {

@@ -1,5 +1,5 @@
 ﻿using System.Net.Http;
-using WebApi.DTO;
+using Domain.DTO;
 using System.Threading.Tasks;
 
 namespace CommandDLL

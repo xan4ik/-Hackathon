@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using WebApi.DTO;
+using Domain.DTO;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
+using CommandDLL.DTO;
 
 namespace CommandDLL
 {
@@ -15,12 +16,14 @@ namespace CommandDLL
         public static string SignInURL => BaseURL + "/api/Auth/sign_in";
         public static string SignOutURL => BaseURL + "/api/Auth/sign_out";
         public static string IonTimeURl => BaseURL + "/api/Time/ion_time";
-        public static string IonInfoURl => BaseURL + "/api/IonInfo";
+        public static string IonNamesURl => BaseURL + "/api/IonInfo/";
+        public static string IonInfoURl => BaseURL + "/api/IonInfo/short_info";
         public static string SessionReportURL => BaseURL + "/api/Time/session_report";
         public static string SessionBeginURL => BaseURL + "/api/Time/session_begin";
         public static string TotalTbURL => BaseURL + "/api/Time/totalTB";
         public static string ContractWorksByIonURL => BaseURL + "/api/Time/contracts_timework";
         public static string ContracsBeginsURL => BaseURL + "/api/Time/contracts_begin";
+        public static string SessionCountURL => BaseURL + "/api/Time/session_count";
     }
 
     public class ApiShell 

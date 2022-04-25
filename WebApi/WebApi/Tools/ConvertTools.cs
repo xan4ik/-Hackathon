@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApi.Tools
+namespace WebAPI.Tools
 {
     public static class ConvertTools 
     {

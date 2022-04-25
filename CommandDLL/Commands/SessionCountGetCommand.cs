@@ -4,21 +4,20 @@ using System.Threading.Tasks;
 
 namespace CommandDLL.Commands
 {
-    public class TotalTechnicalBreakGetCommand : IGetCommand<TimeSpan>
+    public class SessionCountGetCommand : IGetCommand<int>
     {
-        public async Task<TimeSpan> Execute(HttpClient client)
+        public async Task<int> Execute(HttpClient client)
         {
-            var ticks = await client.GetDataAsync<long>(CreateHttpRequest());
-            return new TimeSpan(ticks);
+            var result = await client.GetDataAsync<int>(CreateHttpRequest());
+            return result;
         }
-
 
         private HttpRequestMessage CreateHttpRequest()
         {
             return new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(Constants.TotalTbURL),
+                RequestUri = new Uri(Constants.SessionCountURL)
             };
         }
     }

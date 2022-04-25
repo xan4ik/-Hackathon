@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net.Http;
-using WebApi.DTO;
+using Domain.DTO;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-namespace CommandDLL
+namespace CommandDLL.Commands
 {
     public class SessionReportGetCommand :  IGetCommand<int, SessionReport>
     {

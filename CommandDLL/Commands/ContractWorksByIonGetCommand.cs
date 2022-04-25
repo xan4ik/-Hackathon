@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using WebApi.DTO;
+using Domain.DTO;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Text.Json;
+using CommandDLL.DTO;
 
-namespace CommandDLL
+namespace CommandDLL.Commands
 {
     public class ContractWorksByIonGetCommand : IGetCommand<string, IEnumerable<ContractTimeWorkByIon>>
     {

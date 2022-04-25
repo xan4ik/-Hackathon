@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WebApi.DataProviders
+namespace WebAPI.DataProviders
 {
     public interface IDataProvider<T>
     {
