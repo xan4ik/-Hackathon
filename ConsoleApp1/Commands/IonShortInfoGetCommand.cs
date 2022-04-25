@@ -23,15 +23,17 @@ namespace Command
 
         public async Task<IEnumerable<IonShortInfo>> Execute(HttpClient client)
         {
-            var request = new HttpRequestMessage()
+            var result = await client.GetDataAsync<IonShortInfo[]>(CreateHttpRequest());
+            return result;
+        }
+
+        private HttpRequestMessage CreateHttpRequest()
+        {
+            return new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(Constants.IonInfoURl),
             };
-            var response = await client.GetRawJsonDataAsync(request);
-
-            return JsonSerializer.Deserialize<IonShortInfo[]>(response);
         }
-
     }
 }

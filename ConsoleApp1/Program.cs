@@ -30,9 +30,9 @@ namespace ConsoleApp1
 
             invoker.TrySignInAsync(profile).Wait();
 
+            var res = invoker.GetIonTotalTimeUsingAsync().Result.ToArray();
 
-
-            var res = invoker.GetContractsBegins().Result.ToArray();
+            //var res = invoker.GetContractsBegins().Result.ToArray();
             Console.WriteLine();
             //var result1 = invoker.GetIonTotalTimeUsingAsync().Result;
             //foreach (var item in result1)
@@ -49,7 +49,7 @@ namespace ConsoleApp1
             //}
 
 
-            invoker.TrySignOutAsync().Wait();
+            //invoker.TrySignOutAsync().Wait();
             Console.WriteLine();
          }
 

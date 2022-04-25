@@ -62,14 +62,10 @@ namespace Command
 
         public async Task<IEnumerable<TotalIonTimeUsing>> GetIonTotalTimeUsingAsync() 
         {
-            var command = container.RequareCommand<IGetCommand<IEnumerable<TotalTimeByIon>>>("ion_time");
+            var command = container.RequareCommand<IGetCommand<IEnumerable<TotalIonTimeUsing>>>("ion_time");
             var response = await command.Execute(client);
 
-            return response.Select(x => new TotalIonTimeUsing()
-            {
-                IonName = x.IonName,
-                TotalTime = new TimeSpan(x.TotalTime)
-            }); 
+            return response;
         }
 
         public async Task<IEnumerable<IonShortInfo>> GetIonShortInfoAsync() 
@@ -80,7 +76,7 @@ namespace Command
             return response;
         }
 
-        public async Task<IonShortInfo> GetIonShortInfo(string ionName) 
+        public async Task<IonShortInfo> GetIonShortInfoAsync(string ionName) 
         {
             var command = container.RequareCommand<IGetCommand<string, IonShortInfo>>("ion_info");
             var response = await command.Execute(ionName, client);
@@ -89,7 +85,7 @@ namespace Command
         }
 
 
-        public async Task<SessionReport> GetSessionReport(int sessionNumber) 
+        public async Task<SessionReport> GetSessionReportAsync(int sessionNumber) 
         {
             var command = container.RequareCommand<IGetCommand<int, SessionReport>>("session_report");
             var response = await command.Execute(sessionNumber, client);
@@ -98,7 +94,7 @@ namespace Command
         }
 
 
-        public async Task<DateTime> GetSessionBegin(int sessionNumber) 
+        public async Task<DateTime> GetSessionBeginAsync(int sessionNumber) 
         {
             var command = container.RequareCommand<IGetCommand<int, DateTime>>("session_begin");
             var response = await command.Execute(sessionNumber, client);
@@ -106,7 +102,7 @@ namespace Command
             return response;
         }
 
-        public async Task<TimeSpan> GetTotalTB()
+        public async Task<TimeSpan> GetTotalTbAsync()
         {
             var command = container.RequareCommand<IGetCommand<TimeSpan>>("total_tb");
             var response = await command.Execute(client);
@@ -115,7 +111,7 @@ namespace Command
         }
 
 
-        public async Task<IEnumerable<ContractTimeWorkByIon>> GetContractsTimework(string ion)
+        public async Task<IEnumerable<ContractTimeWorkByIon>> GetContractsTimeworkAsync(string ion)
         {
             var command = container.RequareCommand<IGetCommand<string, IEnumerable<ContractTimeWorkByIon>>>("contracts_timework");
             var response = await command.Execute(ion, client);
@@ -124,7 +120,7 @@ namespace Command
         }
 
 
-        public async Task<IEnumerable<ContractBegin>> GetContractsBegins()
+        public async Task<IEnumerable<ContractBegin>> GetContractsBeginsAsync()
         {
             var command = container.RequareCommand<IGetCommand<IEnumerable<ContractBegin>>>("contracts_begin");
             var response = await command.Execute(client);

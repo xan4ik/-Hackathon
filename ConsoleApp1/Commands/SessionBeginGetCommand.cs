@@ -9,16 +9,20 @@ namespace Command
     {
         public async Task<DateTime> Execute(int args, HttpClient client)
         {
-            var url = String.Concat(Constants.SessionBeginURL, "/", args.ToString());
-            var request = new HttpRequestMessage()
+            var result = await client.GetDataAsync<DateTime>(CreateHttpRequest(args));
+            return result;
+        }
+
+
+        private HttpRequestMessage CreateHttpRequest(int args)
+        {
+            var url = string.Concat(Constants.SessionBeginURL, "/", args.ToString());
+           
+            return new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(url),
             };
-
-            var response = await client.GetRawJsonDataAsync(request);
-
-            return JsonSerializer.Deserialize<DateTime>(response);
         }
     }
 }

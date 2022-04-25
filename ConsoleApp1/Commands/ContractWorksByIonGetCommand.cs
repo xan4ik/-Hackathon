@@ -12,13 +12,7 @@ namespace Command
     {
         public async Task<IEnumerable<ContractTimeWorkByIon>> Execute(string args, HttpClient client)
         {
-            var request = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(string.Concat(Constants.ContractWorksByIonURL, "/", args)),
-            };
-            var response = await client.GetRawJsonDataAsync(request);
-            var result = JsonSerializer.Deserialize<ContractTimeWork[]>(response);
+            var result = await client.GetDataAsync<ContractTimeWork[]>(CreateHttpRequest(args));
 
             return result.Select(x => new ContractTimeWorkByIon()
             {
@@ -26,6 +20,15 @@ namespace Command
                 TotalTimeSpan = new TimeSpan(x.TotalTimeSpan)
             }) ;
             
+        }
+
+        private HttpRequestMessage CreateHttpRequest(string args) 
+        {
+            return new HttpRequestMessage()
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(string.Concat(Constants.ContractWorksByIonURL, "/", args)),
+            };
         }
     }
 }

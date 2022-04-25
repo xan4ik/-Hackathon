@@ -11,14 +11,17 @@ namespace Command
     {
         public async Task<IEnumerable<ContractBegin>> Execute(HttpClient client)
         {
-            var request = new HttpRequestMessage()
+            var result = await client.GetDataAsync<ContractBegin[]>(CreateHttpRequest());
+            return result;
+        }
+
+        private HttpRequestMessage CreateHttpRequest()
+        {
+            return new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(Constants.ContracsBeginsURL),
             };
-            var response = await client.GetRawJsonDataAsync(request);
-
-            return JsonSerializer.Deserialize<ContractBegin[]>(response);
         }
     }
 }

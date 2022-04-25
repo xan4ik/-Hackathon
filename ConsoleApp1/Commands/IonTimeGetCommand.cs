@@ -8,9 +8,9 @@ using System.Linq;
 
 namespace Command
 {
-    public class IonTimeGetCommand : IGetCommand<IEnumerable<TotalTimeByIon>>, IGetCommand<string, TotalTimeByIon>
+    public class IonTimeGetCommand : IGetCommand<IEnumerable<TotalIonTimeUsing>>, IGetCommand<string, TotalIonTimeUsing>
     {
-        public async Task<TotalTimeByIon> Execute(string args, HttpClient client)
+        public async Task<TotalIonTimeUsing> Execute(string args, HttpClient client)
         {
             var result = await Execute(client);
 
@@ -23,24 +23,23 @@ namespace Command
             throw new Exception("No data found");
         }
 
-        public async Task<IEnumerable<TotalTimeByIon>> Execute(HttpClient client)
+        public async Task<IEnumerable<TotalIonTimeUsing>> Execute(HttpClient client)
         {
-            var request = new HttpRequestMessage()
+            var result = await client.GetDataAsync<TotalTimeByIon[]>(CreateHttpRequest());
+            return result.Select(x => new TotalIonTimeUsing()
+            {
+                IonName = x.IonName,
+                TotalTime = new TimeSpan(x.TotalTime)
+            });
+        }
+
+        private HttpRequestMessage CreateHttpRequest()
+        {
+            return new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(Constants.IonTimeURl),
             };
-
-            var responce = await client.SendAsync(request);
-
-            if (responce.StatusCode != System.Net.HttpStatusCode.OK) 
-            {
-                throw new Exception("some Exception");
-            }
-
-            var rawContent = await responce.Content.ReadAsStringAsync();
-            
-            return JsonSerializer.Deserialize<TotalTimeByIon[]>(rawContent);
         }
     }
 }

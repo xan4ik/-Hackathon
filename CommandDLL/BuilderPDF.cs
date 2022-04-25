@@ -1,3 +1,6 @@
+using System.IO;
+using System.Net.Mime;
+
 namespace CommandDLL
 {
     class BuilderPDF : IDocumentBuilder

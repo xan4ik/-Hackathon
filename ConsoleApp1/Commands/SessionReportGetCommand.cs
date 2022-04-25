@@ -10,16 +10,20 @@ namespace Command
     {
         public async Task<SessionReport> Execute(int args, HttpClient client)
         {
-            var url = String.Concat(Constants.SessionReportURL, "/", args.ToString());
-            var request = new HttpRequestMessage()
+            var result = await client.GetDataAsync<SessionReport>(CreateHttpRequest(args));
+            return result;
+        }
+
+
+        private HttpRequestMessage CreateHttpRequest(int args)
+        {
+            var url = string.Concat(Constants.SessionReportURL, "/", args.ToString());
+
+            return new HttpRequestMessage()
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(url),
             };
-
-            var response = await client.GetRawJsonDataAsync(request);
-
-            return JsonSerializer.Deserialize<SessionReport>(response);
         }
     }
 }
