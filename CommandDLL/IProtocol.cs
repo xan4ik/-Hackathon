@@ -4,7 +4,7 @@ namespace CommandDLL
     {
         public string name { get; }
         public byte[] body { get; set; }
-        public string html_text { get; private set; }
+        public string html_text { get; }
         public void SetHtml(int seans);
     }
 }

@@ -10,7 +10,7 @@ namespace CommandDLL
         public void SetHtml(int seans)
         {
             var html = File.ReadAllText("html/non_standard.html");
-            html.Replace(_seans_number_, seans);
+            html.Replace("_seans_number_", seans.ToString());
             //other properties?
             html_text = html;
         }
