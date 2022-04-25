@@ -5,6 +5,6 @@ namespace CommandDLL
     interface IDocumentBuilder
     {
         public ContentType ct { get; }
-        byte[] generateDocument(string html_path, int session);
+        byte[] generateDocument(string html_path);
     }
 }

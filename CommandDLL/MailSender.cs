@@ -9,25 +9,35 @@ namespace CommandDLL
 {
     class MailSender
     {
-        private List<Protocol> docs;
+        private List<IProtocol> docs;
         private IDocumentBuilder builder;
         public MailSender(IDocumentBuilder builder)
         {
-            docs = new List<Protocol>();
+            docs = new List<IProtocol>();
             this.builder = builder;
         }
-        public void AddDocument(ProtocolType type, int session)
+        public void AddDocument(ProtocolType type, int seans)
         {
+            var protocol;
             switch (type)
             {
                 case ProtocolType.Non_standard:
-                    docs.Add(new Protocol { name = "Нестандартный протокол", body = builder.generateDocument("html/non_standard.html", session) });
+                    protocol = new NonStandardProtocol();
+                    protocol.SetHtml(seans);
+                    protocol.body = builder.generateDocument(protocol.html_text);
+                    docs.Add(protocol);
                     break;
                 case ProtocolType.Monitoring:
-                    docs.Add(new Protocol { name = "Протокол мониторинга", body = builder.generateDocument("html/monitoring.html", session) });
+                    protocol = new MonitoringProtocol();
+                    protocol.SetHtml(seans);
+                    protocol.body = builder.generateDocument(protocol.html_text);
+                    docs.Add(protocol);
                     break;
                 case ProtocolType.Allowance:
-                    docs.Add(new Protocol { name = "Протокол допуска", body = builder.generateDocument("html/allowance.html", session) });
+                    protocol = new AllowanceProtocol();
+                    protocol.SetHtml(seans);
+                    protocol.body = builder.generateDocument(protocol.html_text);
+                    docs.Add(protocol);
                     break;
             }
         }
