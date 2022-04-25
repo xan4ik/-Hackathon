@@ -12,7 +12,7 @@ namespace CommandDLL
 {
     public static class Constants 
     {
-        public const string BaseURL = @"https://0037-176-193-11-56.eu.ngrok.io";
+        public const string BaseURL = @"https://localhost:44355";
         public static string SignInURL => BaseURL + "/api/Auth/sign_in";
         public static string SignOutURL => BaseURL + "/api/Auth/sign_out";
         public static string IonTimeURl => BaseURL + "/api/Time/ion_time";
@@ -26,7 +26,7 @@ namespace CommandDLL
         public static string SessionCountURL => BaseURL + "/api/Time/session_count";
     }
 
-    public class ApiShell 
+    public class ApiShell : IDisposable
     {
         private HttpClient client;
         private CommandContainer container;
@@ -41,25 +41,26 @@ namespace CommandDLL
 
         public async Task TrySignInAsync(UserProfile profile) 
         {
-            var command = container.RequareCommand<IAuthenticateCommand>("auth");
             if (string.IsNullOrEmpty(profile.Login)) 
             {
                 throw new Exception("Bad info");
             }
-
+         
+            var command = container.RequareCommand<IAuthenticateCommand>("auth");
             await command.SignInAsync(profile, client);
             isSignIn = true;
         }
 
         public async Task TrySignOutAsync() 
-        {
-            var command = container.RequareCommand<IAuthenticateCommand>("auth");
-            if (isSignIn)
+        { 
+            if (!isSignIn)
             {
-                await command.SignOutAsync(client);
-                isSignIn = false;
+                throw new Exception("You are not authorized");
             }
-            else throw new Exception("You are not authorized");
+
+            var command = container.RequareCommand<IAuthenticateCommand>("auth");
+            await command.SignOutAsync(client);
+            isSignIn = false;
         }
 
 
@@ -130,5 +131,49 @@ namespace CommandDLL
 
             return response;
         }
+
+        public async Task<IEnumerable<string>> GetIonNamesAsync() 
+        {
+            var command = container.RequareCommand<IGetCommand<IEnumerable<string>>>("ion_names");
+            var response = await command.Execute(client);
+
+            return response;
+        }
+
+        public async Task<int> GetSessionCountAsync()
+        {
+            var command = container.RequareCommand<IGetCommand<int>>("session_count");
+            var response = await command.Execute(client);
+
+            return response;
+        }
+
+        #region Dispose
+        private bool isDisposed = false;
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        ~ApiShell() 
+        {
+            Dispose(false);
+        }
+
+        private void Dispose(bool disposing) 
+        {
+            if (!isDisposed)
+            {
+                if (disposing)
+                {
+                    client.Dispose();
+                }
+                disposing = true;
+            }
+        }
+
+        #endregion
+
     }
 }

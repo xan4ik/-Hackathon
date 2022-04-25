@@ -2,8 +2,9 @@
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using CommandDLL.Exceptions;
 
-namespace CommandDLL
+namespace CommandDLL.Tools
 {
     public static class HttpRequestTools
     {
@@ -15,13 +16,29 @@ namespace CommandDLL
         }
 
 
-        public static async Task<string> GetRawJsonDataAsync(this HttpClient client, HttpRequestMessage request) 
+        public static async Task<string> GetRawJsonDataAsync(this HttpClient client, HttpRequestMessage request)
+        {
+            try
+            {
+                return await TryGetRawJsonString(client, request);
+            }
+            catch (HttpExecutionException exception)
+            {
+                throw exception;
+            }
+            catch (Exception exception)
+            {
+                throw new UnhandledException(exception);
+            }
+        }
+
+        private static async Task<string> TryGetRawJsonString(HttpClient client, HttpRequestMessage request)
         {
             var responce = await client.SendAsync(request);
 
             if (responce.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                throw new Exception("some Exception");
+                throw new HttpExecutionException(responce.StatusCode);
             }
 
             return await responce.Content.ReadAsStringAsync();

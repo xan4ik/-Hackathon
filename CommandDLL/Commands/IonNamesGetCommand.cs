@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using CommandDLL.Tools;
 
 namespace CommandDLL.Commands
 {
