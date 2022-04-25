@@ -1,15 +1,82 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:AppUI.ViewModels"
+        xmlns:views="using:AppUI.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:material="using:Material.Icons.Avalonia"
         xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:rxui="clr-namespace:Avalonia.ReactiveUI;assembly=Avalonia.ReactiveUI"
+        MinWidth="1024" MinHeight="576"
+        mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="576"
         x:Class="AppUI.Views.MainWindow"
         Title="AppUI">
 
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
+    
+    <Window.Styles>
+        <Style Selector="Button.ListItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Margin" Value="-8"/>
+            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+    </Window.Styles>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <styles:ColorZone Mode="PrimaryMid">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="64" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <TextBlock Classes="Headline6" FontWeight="UltraBold"
+                               Text="INFO DETECTOR"  TextAlignment="Center"
+                               VerticalAlignment="Center" />
+                    <Separator Margin="0 64 0 0"/>
+                </Grid>
+                <Grid Row="1">
+                    <ListBox Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
+                        <Button Classes="ListItem" Command="{Binding GoContractInformation}">
+                            <StackPanel Orientation="Horizontal">
+                                <material:MaterialIcon Height="20" Width="20" Kind="ContentPaste" Margin="10 0 10 0"/>
+                                <TextBlock FontSize="16" Text="Информация по&#x0a;договору"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="ListItem" Command="{Binding GoIonInformation}">
+                            <StackPanel Orientation="Horizontal">
+                                <material:MaterialIcon Height="20" Width="20" Kind="React" Margin="10 0 10 0"/>
+                                <TextBlock FontSize="16"  Text="Информация по иону"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="ListItem" Command="{Binding GoSessionsInformation}">
+                            <StackPanel Orientation="Horizontal">
+                                <material:MaterialIcon Height="20" Width="20" Kind="ClockOutline" Margin="10 0 10 0"/>
+                                <TextBlock FontSize="16"  Text="Информация по&#x0a;сеансу"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="ListItem" Command="{Binding GoGetPdf}">
+                            <StackPanel Orientation="Horizontal">
+                                <material:MaterialIcon Height="20" Width="20" Kind="FilePdf" Margin="10 0 10 0"/>
+                                <TextBlock FontSize="16"  Text="Генерация PDF"/>
+                            </StackPanel>
+                        </Button>
+                    </ListBox>
+                </Grid>
+            </Grid>
+        </styles:ColorZone>
+        <rxui:RoutedViewHost Grid.Column="1" Router="{Binding Router}">
+            <rxui:RoutedViewHost.DefaultContent>
+                <views:ContractInformationView />
+            </rxui:RoutedViewHost.DefaultContent>
+        </rxui:RoutedViewHost>
+    </Grid>
 
 </Window>

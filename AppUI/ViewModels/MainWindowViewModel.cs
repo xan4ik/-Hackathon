@@ -1,11 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace AppUI.ViewModels;
 
-namespace AppUI.ViewModels
+public class MainWindowViewModel : ViewModelBase, IScreen
 {
-    public class MainWindowViewModel : ViewModelBase
+    public RoutingState Router { get; } = new RoutingState();
+    
+    public ReactiveCommand<Unit, IRoutableViewModel> GoContractInformation { get; }
+    public ReactiveCommand<Unit, IRoutableViewModel> GoIonInformation { get; }
+    public ReactiveCommand<Unit, IRoutableViewModel> GoSessionsInformation { get; }
+    public ReactiveCommand<Unit, IRoutableViewModel> GoGetPdf { get; }
+
+    public MainWindowViewModel()
     {
-        public string Greeting => "Welcome to Avalonia!";
+        GoContractInformation =
+            ReactiveCommand.CreateFromObservable(() =>
+                Router.Navigate.Execute(new ContractInformationViewModel(this))
+                );
+        GoIonInformation =
+            ReactiveCommand.CreateFromObservable(() =>
+                Router.Navigate.Execute(new IonInformationViewModel(this))
+                );
+        GoSessionsInformation =
+            ReactiveCommand.CreateFromObservable(() =>
+                Router.Navigate.Execute(new SessionInformationViewModel(this))
+            );
+        GoGetPdf =
+            ReactiveCommand.CreateFromObservable(() =>
+                Router.Navigate.Execute(new GetPdfViewModel(this))
+            );
     }
 }

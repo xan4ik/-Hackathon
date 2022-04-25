@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AppUI.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:wpf="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AppUI.Views.GetPdfView">
+    
+    <Design.DataContext>
+        <vm:GetPdfViewModel />
+    </Design.DataContext>
+    
+    <Grid Margin="20 10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64" />
+            <RowDefinition Height="64" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="0 10 10 0" UseFloatingWatermark="True"
+                     wpf:TextFieldAssist.Label="Email"/>
+        </Grid>
+        <Grid Row="1" Margin="0 10 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="0 0 10 0" UseFloatingWatermark="True"
+                     wpf:TextFieldAssist.Label="Сеанс"/>
+            <Button Grid.Column="1" Margin="10 0 0 0">
+                <TextBlock Text="Получить PDF" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
+        </Grid>
+        <Grid Row="2" Margin="0 10 0 0">
+            
+        </Grid>
+    </Grid>
+    
+</UserControl>

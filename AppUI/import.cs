@@ -1,0 +1,13 @@
+global using AppUI.ViewModels;
+global using Avalonia;
+global using Avalonia.Markup.Xaml;
+global using Avalonia.ReactiveUI;
+global using Avalonia.Controls;
+global using Avalonia.Controls.Templates;
+global using Avalonia.Controls.ApplicationLifetimes;
+global using AppUI.Views;
+global using System;
+global using System.Runtime.Serialization;
+global using System.Reactive;
+global using ReactiveUI;
+global using Splat;

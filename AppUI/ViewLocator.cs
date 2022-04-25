@@ -1,8 +1,3 @@
-using System;
-using Avalonia.Controls;
-using Avalonia.Controls.Templates;
-using AppUI.ViewModels;
-
 namespace AppUI
 {
     public class ViewLocator : IDataTemplate

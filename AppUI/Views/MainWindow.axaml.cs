@@ -1,12 +1,9 @@
-using Avalonia.Controls;
-
-namespace AppUI.Views
+namespace AppUI.Views;
+public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
 {
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        this.WhenActivated(disposables => { });
+        InitializeComponent();
     }
 }

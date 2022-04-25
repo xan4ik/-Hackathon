@@ -1,9 +1,3 @@
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
-using AppUI.ViewModels;
-using AppUI.Views;
-
 namespace AppUI
 {
     public partial class App : Application
@@ -17,6 +11,15 @@ namespace AppUI
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                Locator.CurrentMutable.Register<IViewFor<ContractInformationViewModel>>(() =>
+                    new ContractInformationView());
+                Locator.CurrentMutable.Register<IViewFor<IonInformationViewModel>>(() =>
+                    new IonInformationView());
+                Locator.CurrentMutable.Register<IViewFor<SessionInformationViewModel>>(() =>
+                    new SessionInformationView());
+                Locator.CurrentMutable.Register<IViewFor<GetPdfViewModel>>(() =>
+                    new GetPdfView());
+                
                 desktop.MainWindow = new MainWindow
                 {
                     DataContext = new MainWindowViewModel(),

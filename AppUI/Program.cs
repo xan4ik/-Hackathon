@@ -1,9 +1,4 @@
-﻿using System;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.ReactiveUI;
-
-namespace AppUI
+﻿namespace AppUI
 {
     class Program
     {
