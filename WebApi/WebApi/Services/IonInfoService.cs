@@ -9,6 +9,8 @@ namespace WebApi.Services
     public interface IIonInfoService 
     {
         IEnumerable<IonShortInfo> GetIonShortInfo();
+
+        IEnumerable<string> GetIonNames();
     }
 
     public class IonInfoServices : IIonInfoService
@@ -17,6 +19,13 @@ namespace WebApi.Services
         public IonInfoServices(IDataProvider<IonInfo> provider)
         {
             _provider = provider;
+        }
+
+        public IEnumerable<string> GetIonNames()
+        {
+            var data = _provider.GetData();
+
+            return data.Select(x => x.IonName);
         }
 
         public IEnumerable<IonShortInfo> GetIonShortInfo() 

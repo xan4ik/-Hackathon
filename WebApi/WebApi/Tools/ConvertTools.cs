@@ -22,6 +22,15 @@ namespace WebApi.Tools
             return 0;
         }
 
+        public static float GetFloatOrDefault(this string value)
+        {
+            if (float.TryParse(value, out float result))
+            {
+                return result;
+            }
+            return 0f;
+        }
+
         public static DateTime GetDateTimeOrDefault(this string value)
         {
             if (DateTime.TryParse(value, out DateTime result))

@@ -36,6 +36,11 @@ namespace WebApi.Controllers
         [HttpGet("session_report/{sessionNumber:int}")]
         public IActionResult GetSessionReport(int sessionNumber)
         {
+            if (_service.HasNotSession(sessionNumber)) 
+            {
+                return BadRequest();
+            }
+
             var result = _service.GetSessionReport(sessionNumber);
             return Ok(result);
         }
@@ -43,6 +48,11 @@ namespace WebApi.Controllers
         [HttpGet("session_begin/{sessionNumber:int}")]
         public IActionResult GetSessionBegin(int sessionNumber)
         {
+            if (_service.HasNotSession(sessionNumber)) 
+            {
+                return BadRequest();
+            }
+
             var result = _service.GetSessionBegin(sessionNumber);
             return Ok(result);
         }
@@ -64,7 +74,19 @@ namespace WebApi.Controllers
         [HttpGet("contracts_timework/{ionName}")]
         public IActionResult GetContractTimeWorksByIonName(string ionName) 
         {
+            if (_service.HasNotIon(ionName)) 
+            {
+                return BadRequest();
+            }
+
             var result = _service.GetContractTimeWorksByIonName(ionName);
+            return Ok(result);
+        }
+
+        [HttpGet("session_count")]
+        public IActionResult GetSessionCount() 
+        {
+            var result = _service.GetSessionCount();
             return Ok(result);
         }
     }

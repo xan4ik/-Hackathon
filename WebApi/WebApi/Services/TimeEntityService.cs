@@ -13,9 +13,12 @@ namespace WebApi.Services
         SessionReport GetSessionReport(int sessionNumber);
         DateTime GetSessionBegin(int sessionNumber);
         IEnumerable<ContractBegin> GetContractsBegin();
-        IEnumerable<TotalTimeByIon> CountTotalTimeByIon();
+        IEnumerable<TotalTimeByIon> CountTotalTimeByIon();  
+        bool HasNotSession(int sessionNumber);        
+        bool HasNotIon(string ionName);        
         long GetTBTotalTime();
-        IEnumerable<ContractTimeWork> GetContractTimeWorksByIonName(string ionName);
+        IEnumerable<ContractTimeWork> GetContractTimeWorksByIonName(string ionName); 
+        int GetSessionCount();
     }
 
 
@@ -53,6 +56,11 @@ namespace WebApi.Services
                 return "Состояния сеанса не установленно";
             }
 
+            if (HasNotSession(sessionNumber)) 
+            {
+                throw new Exception("No session with id " + sessionNumber);
+            }
+
             var session = _provider.GetData().First(x => x.Id == sessionNumber);
             return new SessionReport()
             {
@@ -61,8 +69,18 @@ namespace WebApi.Services
             }; 
         }
 
+        public bool HasNotSession(int sessionNumber) 
+        {
+            return  !( sessionNumber >0 && _provider.GetData().Any(x => x.Id == sessionNumber));
+        }
+
         public DateTime GetSessionBegin(int sessionNumber) 
         {
+            if (HasNotSession(sessionNumber))
+            {
+                throw new Exception("No session with id " + sessionNumber);
+            }
+
             var session = _provider.GetData().First(x => x.Id == sessionNumber);
             return session.SessionBegin;
         }
@@ -85,8 +103,18 @@ namespace WebApi.Services
             return data.Sum(x => x.TbSpan.Ticks);
         }
 
+        public bool HasNotIon(string ionName) 
+        {
+            return !_provider.GetData().Any(x => x.IonName == ionName);
+        }
+
         public IEnumerable<ContractTimeWork> GetContractTimeWorksByIonName(string ionName) 
         {
+            if (HasNotIon(ionName)) 
+            {
+                throw new Exception("No ion with name " + ionName);
+            }
+
             var data = _provider.GetData();
             return data.Where(x => x.IonName == ionName)
                        .GroupBy(x => x.Organization)
@@ -95,6 +123,12 @@ namespace WebApi.Services
                            CompanyName = x.Key,
                            TotalTimeSpan = x.Sum(v=>v.TimeWithTB.Ticks)
                        });
+        }
+
+        public int GetSessionCount()
+        {
+            var data = _provider.GetData();
+            return data.Max(x => x.Id);
         }
     }
 }
