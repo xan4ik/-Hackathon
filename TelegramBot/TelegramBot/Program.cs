@@ -12,13 +12,16 @@ namespace TelegramBot
 {
     class Program
     {
-        private static string token = "5332022872:AAHDxLUT0ZRxH8KsjUlLtloE68WDAKgTiVM";
+        private static string token = "5398021083:AAEp9mJHuEwwZAvbSLsDYh8H6YlKBTTmZlo";
         private static TelegramBotClient client;
-        public static ITelegramEventHandler activeHandler = null;
+        private static Dictionary<long, ITelegramEventHandler> clients;
+
+        //public static ITelegramEventHandler activeHandler = null;
 
         static void Main(string[] args)
         {
             client = new TelegramBotClient(token);
+            clients = new Dictionary<long, ITelegramEventHandler>();
 
             Console.WriteLine("Запущен бот " + client.GetMeAsync().Result.FirstName); //проверка запущен ли бот
 
@@ -41,15 +44,17 @@ namespace TelegramBot
         {
             Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update)); //данные в консоли(удоли)
             Console.WriteLine();
-
-            var chatID = update.Message.Chat.Id;
-            var text = "Неизвестная команда: " + update.Message.Text;
-
             try
             {
-                if (activeHandler != null) 
+               
+                var chatID = update.Message.Chat.Id;
+                var text = "Неизвестная команда: " + update.Message.Text;
+                var clientId = update.Message.From.Id;
+                     
+
+                if (clients.ContainsKey(clientId))
                 {
-                    await activeHandler.Handle(botClient, update);
+                    await clients[clientId].Handle(botClient, update);
                     return;
 
                 }
@@ -65,6 +70,17 @@ namespace TelegramBot
         {
             // Некоторые действия
             Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(exception));
+        }
+
+
+        public static void AddClientHandler(long id, ITelegramEventHandler handler) 
+        {
+            clients.Add(id, handler);
+        }
+
+        public static void RemoveClientHandler(long id) 
+        {
+            clients.Remove(id);
         }
     }
 
@@ -186,11 +202,11 @@ namespace TelegramBot
         }
         public Task Handle(ITelegramBotClient botClient, Update update)
         {
-            Program.activeHandler = new TelegramEventReturnInfo(update.Message.Text, eventButtons);
+            Program.AddClientHandler(update.Message.From.Id, new TelegramEventReturnInfo(update.Message.Text, eventButtons));
             var chatID = update.Message.Chat.Id;
             //var text = update.Message.Text;
 
-            return botClient.SendTextMessageAsync(chatID, message);
+            return botClient.SendTextMessageAsync(chatID, message, replyMarkup: new ReplyKeyboardRemove());
         }
     }
 
@@ -208,7 +224,7 @@ namespace TelegramBot
             var chatID = update.Message.Chat.Id;
             var text = update.Message.Text;
 
-            Program.activeHandler = null;
+            Program.RemoveClientHandler(update.Message.From.Id);
             return botClient.SendTextMessageAsync(chatID, GetInfo(nameCommand, text), replyMarkup: eventButtons.GetButtons(ConstNameButton.names.Keys));
         }
 

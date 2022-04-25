@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "..\Domain\Domain\Domain.csproj", "{F13B1412-8A95-40A9-A100-7DE29A05585B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDLL", "..\CommandDLL\CommandDLL.csproj", "{70785213-C4CA-4FEE-963D-3829304A5C34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDLL", "..\CommandDLL\CommandDLL.csproj", "{70785213-C4CA-4FEE-963D-3829304A5C34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\ConsoleApp1\ConsoleApp1.csproj", "{A59EAE45-7920-404A-B508-EF8D49D91D1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "..\ConsoleApp1\ConsoleApp1.csproj", "{A59EAE45-7920-404A-B508-EF8D49D91D1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBot", "..\TelegramBot\TelegramBot\TelegramBot.csproj", "{CB6D075E-F6A6-4C62-88C2-3980436B01C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A59EAE45-7920-404A-B508-EF8D49D91D1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A59EAE45-7920-404A-B508-EF8D49D91D1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A59EAE45-7920-404A-B508-EF8D49D91D1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB6D075E-F6A6-4C62-88C2-3980436B01C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB6D075E-F6A6-4C62-88C2-3980436B01C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB6D075E-F6A6-4C62-88C2-3980436B01C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB6D075E-F6A6-4C62-88C2-3980436B01C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
