@@ -5,11 +5,6 @@ using System.Text.Json;
 
 namespace CommandDLL
 {
-    public interface IGetCommand<T> 
-    {
-        T GetData();
-    }
-
     public class SampleMail
     {
         void Send()

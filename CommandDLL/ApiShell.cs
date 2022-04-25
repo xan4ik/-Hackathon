@@ -11,7 +11,7 @@ namespace CommandDLL
 {
     public static class Constants 
     {
-        public const string BaseURL = @"https://localhost:44355";
+        public const string BaseURL = @"https://0037-176-193-11-56.eu.ngrok.io";
         public static string SignInURL => BaseURL + "/api/Auth/sign_in";
         public static string SignOutURL => BaseURL + "/api/Auth/sign_out";
         public static string IonTimeURl => BaseURL + "/api/Time/ion_time";

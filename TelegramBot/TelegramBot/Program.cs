@@ -7,6 +7,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Collections.Generic;
+using CommandDLL;
 
 namespace TelegramBot
 {
@@ -15,8 +16,9 @@ namespace TelegramBot
         private static string token = "5398021083:AAEp9mJHuEwwZAvbSLsDYh8H6YlKBTTmZlo";
         private static TelegramBotClient client;
         private static Dictionary<long, ITelegramEventHandler> clients;
+        private static ApiShell shell;
 
-        //public static ITelegramEventHandler activeHandler = null;
+        public static ApiShell Shell { get => shell;}
 
         static void Main(string[] args)
         {
@@ -24,6 +26,20 @@ namespace TelegramBot
             clients = new Dictionary<long, ITelegramEventHandler>();
 
             Console.WriteLine("Запущен бот " + client.GetMeAsync().Result.FirstName); //проверка запущен ли бот
+
+            shell = new ApiShell();
+
+            var profile = new WebApi.DTO.UserProfile()
+            {
+                Login = "BOT",
+                Password = "12345",
+                IsBot = true
+            };
+
+            shell.TrySignInAsync(profile).Wait();
+
+
+            //var data = shell.GetSessionReportAsync(130).Result;
 
             var cts = new CancellationTokenSource();
             var cancellationToken = cts.Token; //объект для остановки потоков
@@ -112,16 +128,41 @@ namespace TelegramBot
 
             events.Add("Неизвестная команда", new TelegramEventButtons(ConstNameButton.names.Keys, "Неизвестная команда: "));
 
-            events.Add("Общее время работы с разбивкой по ионам", new TelegramEventAPI(new TelegramEventButtons()));
-            events.Add("Время начала работ по договору", new TelegramEventAPI(new TelegramEventButtons()));
+            events.Add("Общее время работы с разбивкой по ионам",
+                new TelegramEventAPI<Task<IEnumerable<TotalIonTimeUsing>>>(new TelegramEventButtons(),
+                () => Program.Shell.GetIonTotalTimeUsingAsync(),
+                (x) =>
+                {
+                    string result = "";
+                    foreach (var item in x.Result)
+                    {
+                        result += item.IonName + " " + item.TotalTime + "\n";
+                    }
+                    return result;
+                }));
+            events.Add("Время начала работ по договору",
+                new TelegramEventAPI<Task<IEnumerable<WebApi.DTO.ContractBegin>>>(new TelegramEventButtons(),
+                () => Program.Shell.GetContractsBeginsAsync(),
+                (x) =>
+                {
+                    string result = "";
+                    foreach (var item in x.Result)
+                    {
+                        result += item.CompanyName + " " + item.WorkBegin + "\n";
+                    }
+                    return result;
+                }));
 
-            events.Add("№ последнего сеанса и его статус", new TelegramEventAPI(new TelegramEventButtons()));
-            events.Add("Время начала последнего сеанса", new TelegramEventAPI(new TelegramEventButtons()));
-            events.Add("№ договора последнего сеанса", new TelegramEventAPI(new TelegramEventButtons()));
+            //events.Add("№ последнего сеанса и его статус", new TelegramEventAPI<Task<IEnumerable<TotalIonTimeUsing>>>(new TelegramEventButtons(), () => Program.Shell));
+            //events.Add("Время начала последнего сеанса", new TelegramEventAPI<Task<IEnumerable<TotalIonTimeUsing>>>(new TelegramEventButtons()));
+            //events.Add("№ договора последнего сеанса", new TelegramEventAPI<Task<IEnumerable<TotalIonTimeUsing>>>(new TelegramEventButtons()));
 
             events.Add("Тип, энергия, пробег в кремнии", new TelegramEventGetDopInfo("Напишите ион", new TelegramEventButtons()));
             events.Add("Выработанное время на ионе по каждому договору", new TelegramEventGetDopInfo("Напишите ион", new TelegramEventButtons()));
-            events.Add("Время затраченное на технологические перерывы и простои", new TelegramEventAPI(new TelegramEventButtons()));
+            events.Add("Время затраченное на технологические перерывы и простои", 
+                new TelegramEventAPI<Task<TimeSpan>>(new TelegramEventButtons(), 
+                () => Program.Shell.GetTotalTbAsync(),
+                (x) => {return x.Result.ToString();}));
 
             events.Add("Cтатус сеанса", new TelegramEventGetDopInfo("Напишите номер сеанса", new TelegramEventButtons()));
             events.Add("Время начала данного сеанса", new TelegramEventGetDopInfo("Напишите номер сеанса", new TelegramEventButtons()));
@@ -169,25 +210,30 @@ namespace TelegramBot
         }
     }
 
-    class TelegramEventAPI : ITelegramEventHandler
+    class TelegramEventAPI<T> : ITelegramEventHandler
     {
         private TelegramEventButtons eventButtons;
-        public TelegramEventAPI(TelegramEventButtons eventButtons)
+        private Func<T> apiFunc;
+        private Func<T, string> resultFormater;
+        public TelegramEventAPI(TelegramEventButtons eventButtons, Func<T> apiFunction, Func<T, string> resultFormater)
         {
             this.eventButtons = eventButtons;
+            this.resultFormater = resultFormater;
+            apiFunc = apiFunction;
         }
 
         public Task Handle(ITelegramBotClient botClient, Update update)
         {
             var chatID = update.Message.Chat.Id;
             var text = update.Message.Text;
+            var result = resultFormater(apiFunc());
 
-            return botClient.SendTextMessageAsync(chatID, GetInfo(text), replyMarkup: eventButtons.GetButtons(ConstNameButton.names.Keys));
+            return botClient.SendTextMessageAsync(chatID, result, replyMarkup: eventButtons.GetButtons(ConstNameButton.names.Keys));
         }
 
-        private string GetInfo(string message)
+        private string GetInfo()
         {
-            return "Информация по запросу: " + message;
+            return "Информация по запросу: " + apiFunc();
         }
     }
 
