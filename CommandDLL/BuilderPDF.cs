@@ -1,3 +1,4 @@
+using OpenHtmlToPdf;
 using System.IO;
 using System.Net.Mime;
 
@@ -8,7 +9,6 @@ namespace CommandDLL
         public ContentType ct { get => new ContentType(MediaTypeNames.Application.Pdf); }
         public byte[] generateDocument(string html)
         {
-            //var html = File.ReadAllText(html_path);
             var pdf = Pdf
                 .From(html)
                 .OfSize(PaperSize.A4)

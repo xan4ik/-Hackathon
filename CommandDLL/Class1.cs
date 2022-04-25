@@ -15,10 +15,11 @@ namespace CommandDLL
         void Send()
         {
             var builder = new BuilderPDF();
-            MailSender mailSender = new MailSender(builder);
-            mailSender.AddDocument(MailSender.ProtocolType.Non_standard, 1);
-            mailSender.AddDocument(MailSender.ProtocolType.Monitoring, 1);
-            mailSender.AddDocument(MailSender.ProtocolType.Allowance, 1);
+            var messageBuilder = new MessageBuilder(builder);
+            messageBuilder.AddDocument(MessageBuilder.ProtocolType.Non_standard, 1);
+            messageBuilder.AddDocument(MessageBuilder.ProtocolType.Monitoring, 1);
+            messageBuilder.AddDocument(MessageBuilder.ProtocolType.Allowance, 1);
+            MailSender mailSender = new MailSender(messageBuilder.GetDocuments(), builder.ct);
             mailSender.Send("user_mail@something.something");
         }
     }
