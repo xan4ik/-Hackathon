@@ -1,0 +1,220 @@
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Telegram.Bot;
+using Telegram.Bot.Extensions.Polling;
+using Telegram.Bot.Types;
+using Telegram.Bot.Exceptions;
+using Telegram.Bot.Types.ReplyMarkups;
+using System.Collections.Generic;
+
+namespace TelegramBot
+{
+    class Program
+    {
+        private static string token = "5332022872:AAHDxLUT0ZRxH8KsjUlLtloE68WDAKgTiVM";
+        private static TelegramBotClient client;
+        public static ITelegramEventHandler activeHandler = null;
+
+        static void Main(string[] args)
+        {
+            client = new TelegramBotClient(token);
+
+            Console.WriteLine("Запущен бот " + client.GetMeAsync().Result.FirstName); //проверка запущен ли бот
+
+            var cts = new CancellationTokenSource();
+            var cancellationToken = cts.Token; //объект для остановки потоков
+            var receiverOptions = new ReceiverOptions
+            {
+                AllowedUpdates = { }, // реакция на все типы updates 
+            };
+            client.StartReceiving(
+                HandleUpdateAsync,
+                HandleErrorAsync,
+                receiverOptions,
+                cancellationToken
+            );
+            Console.ReadLine();
+        }
+
+        public static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        {
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update)); //данные в консоли(удоли)
+            Console.WriteLine();
+
+            var chatID = update.Message.Chat.Id;
+            var text = "Неизвестная команда: " + update.Message.Text;
+
+            try
+            {
+                if (activeHandler != null) 
+                {
+                    await activeHandler.Handle(botClient, update);
+                    return;
+
+                }
+                await ConstEvents.events[update.Message.Text].Handle(botClient, update);
+            }
+            catch (Exception e)
+            {
+                await ConstEvents.events["Неизвестная команда"].Handle(botClient, update);
+            }
+        }
+
+        public static async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        {
+            // Некоторые действия
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(exception));
+        }
+    }
+
+    static class ConstNameButton
+    {
+        public static readonly Dictionary<string, List<string>> names = new Dictionary<string, List<string>>();
+
+        static ConstNameButton()
+        {
+            names.Add("Информация по договору", new List<string> { "Общее время работы с разбивкой по ионам", "Время начала работ по договору" });
+            names.Add("Информация по иону", new List<string> { "Тип, энергия, пробег в кремнии", "Выработанное время на ионе по каждому договору", "Время затраченное на технологические перерывы и простои" });
+            names.Add("Информация по сеансу", new List<string> { "Cтатус сеанса", "Время начала данного сеанса", "№ договора" });
+            names.Add("Текущее состояние", new List<string> { "№ последнего сеанса и его статус", "Время начала последнего сеанса", "№ договора последнего сеанса" });
+        }
+    }
+
+    static class ConstEvents
+    {
+        public static readonly Dictionary<string, ITelegramEventHandler> events = new Dictionary<string, ITelegramEventHandler>();
+
+        static ConstEvents()
+        {
+            events.Add("/start", new TelegramEventButtons(ConstNameButton.names.Keys, "Добро пожаловать! Выполнено: "));
+
+            events.Add("Информация по договору", new TelegramEventButtons(ConstNameButton.names["Информация по договору"]));
+            events.Add("Информация по иону", new TelegramEventButtons(ConstNameButton.names["Информация по иону"]));
+            events.Add("Информация по сеансу", new TelegramEventButtons(ConstNameButton.names["Информация по сеансу"]));
+            events.Add("Текущее состояние", new TelegramEventButtons(ConstNameButton.names["Текущее состояние"]));
+
+            events.Add("Неизвестная команда", new TelegramEventButtons(ConstNameButton.names.Keys, "Неизвестная команда: "));
+
+            events.Add("Общее время работы с разбивкой по ионам", new TelegramEventAPI(new TelegramEventButtons()));
+            events.Add("Время начала работ по договору", new TelegramEventAPI(new TelegramEventButtons()));
+
+            events.Add("№ последнего сеанса и его статус", new TelegramEventAPI(new TelegramEventButtons()));
+            events.Add("Время начала последнего сеанса", new TelegramEventAPI(new TelegramEventButtons()));
+            events.Add("№ договора последнего сеанса", new TelegramEventAPI(new TelegramEventButtons()));
+
+            events.Add("Тип, энергия, пробег в кремнии", new TelegramEventGetDopInfo("Напишите ион", new TelegramEventButtons()));
+            events.Add("Выработанное время на ионе по каждому договору", new TelegramEventGetDopInfo("Напишите ион", new TelegramEventButtons()));
+            events.Add("Время затраченное на технологические перерывы и простои", new TelegramEventAPI(new TelegramEventButtons()));
+
+            events.Add("Cтатус сеанса", new TelegramEventGetDopInfo("Напишите номер сеанса", new TelegramEventButtons()));
+            events.Add("Время начала данного сеанса", new TelegramEventGetDopInfo("Напишите номер сеанса", new TelegramEventButtons()));
+            events.Add("№ договора", new TelegramEventGetDopInfo("Напишите номер сеанса", new TelegramEventButtons()));
+        }
+    }
+
+    public interface ITelegramEventHandler
+    {
+        public Task Handle(ITelegramBotClient botClient, Update update);
+    }
+
+    class TelegramEventButtons : ITelegramEventHandler
+    {
+        private IEnumerable<string> names;
+        private string textMessage;
+        public TelegramEventButtons(IEnumerable<string> names, string textMessage = "Выполнено: ")
+        {
+            this.names = names;
+            this.textMessage = textMessage;
+        }
+
+        public TelegramEventButtons()
+        { }
+
+        public Task Handle(ITelegramBotClient botClient, Update update)
+        {
+            var chatID = update.Message.Chat.Id;
+            var text = textMessage + update.Message.Text;
+            return botClient.SendTextMessageAsync(chatID, text, replyMarkup: GetButtons(names));
+        }
+
+        public IReplyMarkup GetButtons(IEnumerable<string> names)
+        {
+            var keyboard = new List<List<KeyboardButton>>();
+
+            foreach (var item in names)
+            {
+                var keyboardButtons = new List<KeyboardButton>();
+                keyboard.Add(keyboardButtons);
+                keyboardButtons.Add(new KeyboardButton(item));
+            }
+
+            return new ReplyKeyboardMarkup(keyboard);
+        }
+    }
+
+    class TelegramEventAPI : ITelegramEventHandler
+    {
+        private TelegramEventButtons eventButtons;
+        public TelegramEventAPI(TelegramEventButtons eventButtons)
+        {
+            this.eventButtons = eventButtons;
+        }
+
+        public Task Handle(ITelegramBotClient botClient, Update update)
+        {
+            var chatID = update.Message.Chat.Id;
+            var text = update.Message.Text;
+
+            return botClient.SendTextMessageAsync(chatID, GetInfo(text), replyMarkup: eventButtons.GetButtons(ConstNameButton.names.Keys));
+        }
+
+        private string GetInfo(string message)
+        {
+            return "Информация по запросу: " + message;
+        }
+    }
+
+    class TelegramEventGetDopInfo : ITelegramEventHandler
+    {
+        private string message;
+        private TelegramEventButtons eventButtons;
+        public TelegramEventGetDopInfo(string message, TelegramEventButtons eventButtons)
+        {
+            this.message = message;
+            this.eventButtons = eventButtons;
+        }
+        public Task Handle(ITelegramBotClient botClient, Update update)
+        {
+            Program.activeHandler = new TelegramEventReturnInfo(update.Message.Text, eventButtons);
+            var chatID = update.Message.Chat.Id;
+            //var text = update.Message.Text;
+
+            return botClient.SendTextMessageAsync(chatID, message);
+        }
+    }
+
+    class TelegramEventReturnInfo : ITelegramEventHandler
+    {
+        private string nameCommand;
+        private TelegramEventButtons eventButtons;
+        public TelegramEventReturnInfo(string nameCommand, TelegramEventButtons eventButtons)
+        {
+            this.nameCommand = nameCommand;
+            this.eventButtons = eventButtons;
+        }
+        public Task Handle(ITelegramBotClient botClient, Update update)
+        {
+            var chatID = update.Message.Chat.Id;
+            var text = update.Message.Text;
+
+            Program.activeHandler = null;
+            return botClient.SendTextMessageAsync(chatID, GetInfo(nameCommand, text), replyMarkup: eventButtons.GetButtons(ConstNameButton.names.Keys));
+        }
+
+        private string GetInfo(string command, string dopInfo)
+        {
+            return "Информация по запросу: " + command + " " + dopInfo;
+        }
+    }
+}
