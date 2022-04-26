@@ -26,6 +26,13 @@ namespace WebAPI.Services
             {
                 throw new Exception("No session with id " + entityID);
             }
+
+            return CollectDTOInfo(entityID);
+        }
+
+        private NonStandartDocumentDTO CollectDTOInfo(int entityID)
+        {
+            throw new Exception();
         }
     }
 }
