@@ -7,8 +7,8 @@ namespace CommandDLL
     class MessageBuilder
     {
         private List<IProtocol> docs;
-        private IDocumentBuilder builder;
-        public MessageBuilder(IDocumentBuilder builder)
+        private IDocumentBuilders builder;
+        public MessageBuilder(IDocumentBuilders builder)
         {
             docs = new List<IProtocol>();
             this.builder = builder;

@@ -4,7 +4,7 @@ using System.Net.Mime;
 
 namespace CommandDLL
 {
-    class BuilderPDF : IDocumentBuilder
+    class BuilderPDF : IDocumentBuilders
     {
         public ContentType ct { get => new ContentType(MediaTypeNames.Application.Pdf); }
         public byte[] generateDocument(string html)
