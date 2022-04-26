@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebAPI.Controllers;
+using System.Text;
 
 namespace WebAPI
 {
@@ -15,6 +16,8 @@ namespace WebAPI
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             services.AddSingleton<IDataProvider<DataEntity>, DataEntityCsvProvider>();
             services.AddSingleton<IDataProvider<TimeEntity>, TimeEntityCsvProvider>();
             services.AddSingleton<IDataProvider<IonInfo>, IonInfoCsvProvider>();
