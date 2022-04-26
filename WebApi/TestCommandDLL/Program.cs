@@ -26,16 +26,19 @@ namespace TestCommandDLL
             //    Console.ReadLine();
             //}
 
-            var bulder = new NonStandardPDFProtocolBuilder();
-            bulder.LoadTemplate(@"C:\Users\Lev\source\repos\-Hackathon\CommandDLL\html\allowance.html");
-            bulder.SetDocumentName("test.pdf");
-            var document = bulder.CreateDocument();
+            var data = float.Parse("1,00E+07");
+            Console.WriteLine(data);
 
-            document.Save(".");
+            //var bulder = new NonStandardPDFProtocolBuilder();
+            //bulder.LoadTemplate(@"C:\Users\Lev\source\repos\-Hackathon\CommandDLL\html\allowance.html");
+            //bulder.SetDocumentName("test.pdf");
+            //var document = bulder.CreateDocument();
+
+            //document.Save(".");
 
             //EmailSender sender = new EmailSender();
             //sender.SendDocumentAsync("stack@uni-dubna.ru", document).Wait();
-            
+
 
             Console.WriteLine("Hello World!");
         }

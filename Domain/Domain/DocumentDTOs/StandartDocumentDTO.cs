@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Domain.DocumentDTOs
 {
-    public class NonStandartDocumentDTO
+    public class StandartDocumentDTO
     {
         public int SessionNumber { get; set; }
         public string OrganizationName { get; set; }
@@ -24,7 +24,6 @@ namespace Domain.DocumentDTOs
         public int[] OD { get; set; }
         public float K { get; set; }
         public float ErrorK { get; set; }
-        public double LeftHeterogeneity { get; set; }
-        public double RightHeterogeneity { get; set; }
+        public float Heterogeneity { get; set; }
     }
 }

@@ -8,6 +8,8 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Collections.Generic;
 using CommandDLL;
+using Domain.DTO;
+using CommandDLL.DTO;
 
 namespace TelegramBot
 {
@@ -29,7 +31,7 @@ namespace TelegramBot
 
             shell = new ApiShell();
 
-            var profile = new WebApi.DTO.UserProfile()
+            var profile = new UserProfile()
             {
                 Login = "BOT",
                 Password = "12345",
@@ -141,7 +143,7 @@ namespace TelegramBot
                     return result;
                 }));
             events.Add("Время начала работ по договору",
-                new TelegramEventAPI<Task<IEnumerable<WebApi.DTO.ContractBegin>>>(new TelegramEventButtons(),
+                new TelegramEventAPI<Task<IEnumerable<ContractBegin>>>(new TelegramEventButtons(),
                 () => Program.Shell.GetContractsBeginsAsync(),
                 (x) =>
                 {

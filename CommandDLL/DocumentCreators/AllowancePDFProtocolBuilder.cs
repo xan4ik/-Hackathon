@@ -70,7 +70,7 @@ namespace CommandDLL
         public void SetUsedIon(string ionName, int isotop)
         {
             base.TryReplaceSring("_ion_type_", ionName);
-            base.TryReplaceSring("_ion_", isotop);
+            base.TryReplaceSring("_ion_", isotop.ToString());
         }
     }
 }

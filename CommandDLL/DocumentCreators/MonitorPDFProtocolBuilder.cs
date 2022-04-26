@@ -95,7 +95,7 @@ namespace CommandDLL
 
         public void SetSeansNumber(uint number)
         {
-            base.TryReplaceSring("_seans_number_", number);
+            base.TryReplaceSring("_seans_number_", number.ToString());
         }
 
         public void SetSickness(string sickness)

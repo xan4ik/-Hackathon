@@ -15,13 +15,15 @@ namespace WebAPI
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<IDataProvider<DataEntity>, DataEntityGoogleProvider>();
+            services.AddSingleton<IDataProvider<DataEntity>, DataEntityCsvProvider>();
             services.AddSingleton<IDataProvider<TimeEntity>, TimeEntityCsvProvider>();
             services.AddSingleton<IDataProvider<IonInfo>, IonInfoCsvProvider>();
 
             //services.AddTransient<IDataEntityService, DataEntityService>();
-            services.AddTransient<ITimeEntityService, TimeEntityService>();
-            services.AddTransient<IIonInfoService, IonInfoServices>();
+
+            services.AddScoped<IDocumentService, DocumentService>();
+            services.AddScoped<ITimeEntityService, TimeEntityService>();
+            services.AddScoped<IIonInfoService, IonInfoServices>();
 
             services.AddSwaggerGen();
 
