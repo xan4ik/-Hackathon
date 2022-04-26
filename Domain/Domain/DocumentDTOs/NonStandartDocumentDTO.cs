@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Domain.DocumentDTOs
+{
+    public class NonStandartDocumentDTO
+    {
+        public int SessionNumber { get; set; }
+        public string OrganizationName { get; set; }
+        public string WorkName { get; set; }
+        public long IrradiatedItem { get; set; }
+        public DateTime IrradiatedBegin { get; set; }
+        public long IrradiationTime { get; set; }
+        public float Angle { get; set; }
+        public float Temperature { get; set; }
+        public float Energy { get; set; }
+        public float EnergyError { get; set; }
+        public float DistanceSI { get; set; }
+        public float DistanceError { get; set; }
+        public float LinearLoss { get; set; }
+        public float LinearLossError { get; set; }
+        public long[] TD {get; set;}
+        public long[] OD { get; set; }
+        public float K { get; set; }
+        public float ErrorK { get; set; }
+    }
+}
