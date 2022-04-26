@@ -148,6 +148,18 @@ namespace CommandDLL
             return response;
         }
 
+        public async Task SendEmailMessage(string email, string message)
+        {
+            var command = container.RequareCommand<IEmailSender>("email");
+            await command.SendMessageAsync(email, message);
+        }
+
+        public async Task SendEmailDocument(string email, string message)
+        {
+            var command = container.RequareCommand<IEmailSender>("email");
+            await command.SendMessageAsync(email, message);
+        }
+
         #region Dispose
         private bool isDisposed = false;
 

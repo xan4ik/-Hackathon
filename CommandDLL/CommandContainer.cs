@@ -21,7 +21,8 @@ namespace CommandDLL
                 { "contracts_timework", new ContractWorksByIonGetCommand() },
                 { "contracts_begin", new ContractsBeginsGetCommand() },
                 { "ion_names", new IonNamesGetCommand() },
-                { "session_count", new SessionCountGetCommand() }
+                { "session_count", new SessionCountGetCommand() },
+                { "email", new SendEmailCommand()}
             };
         }
 
