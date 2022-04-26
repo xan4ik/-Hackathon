@@ -12,7 +12,7 @@ namespace CommandDLL
         void SetSesionBegin(DateTime begin);
         void SetSesionEnd(DateTime end);
         void SetTemperature(float temperature);
-        void SetPressure(float pressure);
+        void SetPressure(int pressure);
         void SetHumidity(float humidity);
         void SetDetectorData(long[] data);
         void SetCoefK(float k, float error);

@@ -51,11 +51,6 @@ namespace CommandDLL
                 .Content();
             return new SimpleDocument(documentName, documentContent);
         }
-
-        internal void TryReplaceSring(string v, object p)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }
