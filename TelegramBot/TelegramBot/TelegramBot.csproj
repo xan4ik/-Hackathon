@@ -14,4 +14,10 @@
     <ProjectReference Include="..\..\CommandDLL\CommandDLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="CommandDLL">
+      <HintPath>..\..\CommandDLL\bin\Debug\netcoreapp3.1\CommandDLL.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

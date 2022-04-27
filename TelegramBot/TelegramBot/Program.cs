@@ -41,8 +41,6 @@ namespace TelegramBot
             shell.TrySignInAsync(profile).Wait();
 
 
-            //var data = shell.GetSessionReportAsync(130).Result;
-
             var cts = new CancellationTokenSource();
             var cancellationToken = cts.Token; //объект для остановки потоков
             var receiverOptions = new ReceiverOptions
@@ -66,7 +64,7 @@ namespace TelegramBot
             {
                
                 var chatID = update.Message.Chat.Id;
-                var text = "Неизвестная команда: " + update.Message.Text;
+                //var text = "Неизвестная команда: " + update.Message.Text;
                 var clientId = update.Message.From.Id;
                      
 
@@ -121,16 +119,16 @@ namespace TelegramBot
 
         static ConstEvents()
         {
-            events.Add("/start", new TelegramEventButtons(ConstNameButton.names.Keys, "Добро пожаловать! Выполнено: "));
+            events.Add("/start", new TelegramEventButtons(ConstNameButton.names.Keys, "Добро пожаловать! Выполнено: ")); //+
 
-            events.Add("Информация по договору", new TelegramEventButtons(ConstNameButton.names["Информация по договору"]));
-            events.Add("Информация по иону", new TelegramEventButtons(ConstNameButton.names["Информация по иону"]));
-            events.Add("Информация по сеансу", new TelegramEventButtons(ConstNameButton.names["Информация по сеансу"]));
-            events.Add("Текущее состояние", new TelegramEventButtons(ConstNameButton.names["Текущее состояние"]));
+            events.Add("Информация по договору", new TelegramEventButtons(ConstNameButton.names["Информация по договору"])); //+
+            events.Add("Информация по иону", new TelegramEventButtons(ConstNameButton.names["Информация по иону"])); //+
+            events.Add("Информация по сеансу", new TelegramEventButtons(ConstNameButton.names["Информация по сеансу"])); //+
+            events.Add("Текущее состояние", new TelegramEventButtons(ConstNameButton.names["Текущее состояние"])); //+
 
-            events.Add("Неизвестная команда", new TelegramEventButtons(ConstNameButton.names.Keys, "Неизвестная команда: "));
+            events.Add("Неизвестная команда", new TelegramEventButtons(ConstNameButton.names.Keys, "Неизвестная команда: ")); //+
 
-            events.Add("Общее время работы с разбивкой по ионам",
+            events.Add("Общее время работы с разбивкой по ионам", //+
                 new TelegramEventAPI<Task<IEnumerable<TotalIonTimeUsing>>>(new TelegramEventButtons(),
                 () => Program.Shell.GetIonTotalTimeUsingAsync(),
                 (x) =>
@@ -138,11 +136,12 @@ namespace TelegramBot
                     string result = "";
                     foreach (var item in x.Result)
                     {
-                        result += item.IonName + " " + item.TotalTime + "\n";
+                        result += item.IonName + " - Количество дней: " + item.TotalTime.Days + ". Часы: " + item.TotalTime.Hours + ":" 
+                        + item.TotalTime.Minutes + ":" + item.TotalTime.Seconds + "\n";
                     }
                     return result;
                 }));
-            events.Add("Время начала работ по договору",
+            events.Add("Время начала работ по договору", //+
                 new TelegramEventAPI<Task<IEnumerable<ContractBegin>>>(new TelegramEventButtons(),
                 () => Program.Shell.GetContractsBeginsAsync(),
                 (x) =>
@@ -150,25 +149,80 @@ namespace TelegramBot
                     string result = "";
                     foreach (var item in x.Result)
                     {
-                        result += item.CompanyName + " " + item.WorkBegin + "\n";
+                        result += item.CompanyName + " \n\t- Дата: " + item.WorkBegin.ToShortDateString() + ". Время: " + 
+                        item.WorkBegin.ToShortTimeString() + "\n";
                     }
                     return result;
                 }));
 
-            //events.Add("№ последнего сеанса и его статус", new TelegramEventAPI<Task<IEnumerable<TotalIonTimeUsing>>>(new TelegramEventButtons(), () => Program.Shell));
-            //events.Add("Время начала последнего сеанса", new TelegramEventAPI<Task<IEnumerable<TotalIonTimeUsing>>>(new TelegramEventButtons()));
-            //events.Add("№ договора последнего сеанса", new TelegramEventAPI<Task<IEnumerable<TotalIonTimeUsing>>>(new TelegramEventButtons()));
+            events.Add("№ последнего сеанса и его статус", new TelegramEventAPI<Task<SessionReport>>(new TelegramEventButtons(), //+
+                () => Program.Shell.GetSessionReportAsync(Program.Shell.GetSessionCountAsync().Result),
+                (x) => 
+                {
+                    var report = x.Result;
+                    return "№ последнего сеанса: " + report.SessionNumber+ ". Статус: " + report.Status;
+                }
+                ));
+            events.Add("Время начала последнего сеанса", new TelegramEventAPI<Task<DateTime>>(new TelegramEventButtons(), //+
+                () => Program.Shell.GetSessionBeginAsync(Program.Shell.GetSessionCountAsync().Result),
+                (x) =>
+                {
+                    var report = x.Result;
+                    return "Дата: " + report.ToShortDateString() + ". Время: " + report.ToShortTimeString();
+                }
+                ));
+            events.Add("№ договора последнего сеанса", new TelegramEventAPI<string>(new TelegramEventButtons(), //+
+                () => "xx-xxxx", (x) => x));
 
-            events.Add("Тип, энергия, пробег в кремнии", new TelegramEventGetDopInfo("Напишите ион", new TelegramEventButtons()));
-            events.Add("Выработанное время на ионе по каждому договору", new TelegramEventGetDopInfo("Напишите ион", new TelegramEventButtons()));
-            events.Add("Время затраченное на технологические перерывы и простои", 
-                new TelegramEventAPI<Task<TimeSpan>>(new TelegramEventButtons(), 
+            events.Add("Тип, энергия, пробег в кремнии", new TelegramEventGetDopInfo<IonShortInfo>("Напишите ион", 
+                new TelegramEventButtons(),
+                new TelegramEventReturnInfo<IonShortInfo>( new TelegramEventButtons(),
+                    (update) => Program.Shell.GetIonShortInfoAsync(update.Message.Text).Result,
+                    (x) => "Тип: " + x.Isotope + ", пробег в кремнии" + x.DistanceSI //TODO //добавить энергию, СТАС!!! 
+                    )));
+
+            events.Add("Выработанное время на ионе по каждому договору", new TelegramEventGetDopInfo<IEnumerable<ContractTimeWorkByIon>>(
+                "Напишите ион", 
+                new TelegramEventButtons(),
+                new TelegramEventReturnInfo<IEnumerable<ContractTimeWorkByIon>>(new TelegramEventButtons(),
+                    (update) => Program.Shell.GetContractsTimeworkAsync(update.Message.Text).Result,
+                    (x) =>
+                    {
+                        string result = "";
+                        foreach (var item in x)
+                        {
+                            result += item.CompanyName + " \n\t- Количество дней: " + item.TotalTimeSpan.Days + ". Часы: " 
+                            + item.TotalTimeSpan.Hours + ":" + item.TotalTimeSpan.Minutes + ":" + item.TotalTimeSpan.Seconds + "\n";
+                        }
+                        return result;
+                    }     
+                    )));
+
+            events.Add("Время затраченное на технологические перерывы и простои", //+
+                new TelegramEventAPI<Task<TimeSpan>>(new TelegramEventButtons(),
                 () => Program.Shell.GetTotalTbAsync(),
                 (x) => {return x.Result.ToString();}));
 
-            events.Add("Cтатус сеанса", new TelegramEventGetDopInfo("Напишите номер сеанса", new TelegramEventButtons()));
-            events.Add("Время начала данного сеанса", new TelegramEventGetDopInfo("Напишите номер сеанса", new TelegramEventButtons()));
-            events.Add("№ договора", new TelegramEventGetDopInfo("Напишите номер сеанса", new TelegramEventButtons()));
+            events.Add("Cтатус сеанса", new TelegramEventGetDopInfo<SessionReport>( //+
+                    "Напишите номер сеанса",
+                    new TelegramEventButtons(),
+                    new TelegramEventReturnInfo<SessionReport>(new TelegramEventButtons(),
+                        (update) => Program.Shell.GetSessionReportAsync(int.Parse(update.Message.Text)).Result,
+                        (x) => x.Status
+                    )));
+
+            events.Add("Время начала данного сеанса", new TelegramEventGetDopInfo<DateTime>( //+
+                "Напишите номер сеанса", 
+                new TelegramEventButtons(),
+                new TelegramEventReturnInfo<DateTime>( new TelegramEventButtons(),
+                    (update) => Program.Shell.GetSessionBeginAsync(int.Parse(update.Message.Text)).Result,
+                    (x) => "Дата: " + x.ToShortDateString() + ". Время: " + x.ToShortTimeString()                   
+                )));
+
+            events.Add("№ договора", new TelegramEventGetDopInfo<string>("Напишите номер сеанса", new TelegramEventButtons(), //+
+                new TelegramEventReturnInfo<string>(new TelegramEventButtons(),
+                (update) => "xx-xxxx", 
+                (x) => x)));
         }
     }
 
@@ -232,53 +286,48 @@ namespace TelegramBot
 
             return botClient.SendTextMessageAsync(chatID, result, replyMarkup: eventButtons.GetButtons(ConstNameButton.names.Keys));
         }
-
-        private string GetInfo()
-        {
-            return "Информация по запросу: " + apiFunc();
-        }
     }
 
-    class TelegramEventGetDopInfo : ITelegramEventHandler
+    class TelegramEventGetDopInfo<T> : ITelegramEventHandler
     {
         private string message;
         private TelegramEventButtons eventButtons;
-        public TelegramEventGetDopInfo(string message, TelegramEventButtons eventButtons)
+        private TelegramEventReturnInfo<T> eventReturnInfo;
+
+        public TelegramEventGetDopInfo(string message, TelegramEventButtons eventButtons, TelegramEventReturnInfo<T> eventReturnInfo) 
         {
             this.message = message;
             this.eventButtons = eventButtons;
+            this.eventReturnInfo = eventReturnInfo;
         }
         public Task Handle(ITelegramBotClient botClient, Update update)
         {
-            Program.AddClientHandler(update.Message.From.Id, new TelegramEventReturnInfo(update.Message.Text, eventButtons));
+            Program.AddClientHandler(update.Message.From.Id, eventReturnInfo);
             var chatID = update.Message.Chat.Id;
-            //var text = update.Message.Text;
 
             return botClient.SendTextMessageAsync(chatID, message, replyMarkup: new ReplyKeyboardRemove());
         }
     }
 
-    class TelegramEventReturnInfo : ITelegramEventHandler
+    class TelegramEventReturnInfo<T> : ITelegramEventHandler
     {
-        private string nameCommand;
         private TelegramEventButtons eventButtons;
-        public TelegramEventReturnInfo(string nameCommand, TelegramEventButtons eventButtons)
+        private Func<Update, T> apiFunc;
+        private Func<T, string> resultFormater;
+        public TelegramEventReturnInfo(TelegramEventButtons eventButtons, Func<Update, T> apiFunc, Func<T, string> resultFormater)
         {
-            this.nameCommand = nameCommand;
             this.eventButtons = eventButtons;
+            this.apiFunc = apiFunc;
+            this.resultFormater = resultFormater;
         }
         public Task Handle(ITelegramBotClient botClient, Update update)
         {
             var chatID = update.Message.Chat.Id;
             var text = update.Message.Text;
-
             Program.RemoveClientHandler(update.Message.From.Id);
-            return botClient.SendTextMessageAsync(chatID, GetInfo(nameCommand, text), replyMarkup: eventButtons.GetButtons(ConstNameButton.names.Keys));
-        }
 
-        private string GetInfo(string command, string dopInfo)
-        {
-            return "Информация по запросу: " + command + " " + dopInfo;
+            var result = resultFormater(apiFunc(update));
+            return botClient.SendTextMessageAsync(chatID, result, replyMarkup: eventButtons.GetButtons(ConstNameButton.names.Keys));
         }
     }
 }
