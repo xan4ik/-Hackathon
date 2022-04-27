@@ -31,7 +31,7 @@ namespace WebAPI.DataProviders.ProvidersCSV
         private void CreateEntities()
         {
             _entities = new LinkedList<T>();
-            using (var reader = new StreamReader(_pathToCSV, System.Text.Encoding.Default))
+            using (var reader = new StreamReader(_pathToCSV, System.Text.Encoding.GetEncoding(1251)))
             {
                 reader.ReadLine(); // skip first line
 

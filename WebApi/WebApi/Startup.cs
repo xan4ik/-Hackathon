@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebAPI.Controllers;
+using System.Text;
 
 namespace WebAPI
 {
@@ -15,13 +16,17 @@ namespace WebAPI
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddSingleton<IDataProvider<DataEntity>, DataEntityGoogleProvider>();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            services.AddSingleton<IDataProvider<DataEntity>, DataEntityCsvProvider>();
             services.AddSingleton<IDataProvider<TimeEntity>, TimeEntityCsvProvider>();
             services.AddSingleton<IDataProvider<IonInfo>, IonInfoCsvProvider>();
 
             //services.AddTransient<IDataEntityService, DataEntityService>();
-            services.AddTransient<ITimeEntityService, TimeEntityService>();
-            services.AddTransient<IIonInfoService, IonInfoServices>();
+
+            services.AddScoped<IDocumentService, DocumentService>();
+            services.AddScoped<ITimeEntityService, TimeEntityService>();
+            services.AddScoped<IIonInfoService, IonInfoServices>();
 
             services.AddSwaggerGen();
 

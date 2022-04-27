@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace CommandDLL
 {
@@ -26,9 +27,9 @@ namespace CommandDLL
             return content;
         }
 
-        public void Save(string path)
+        public async Task SaveAsync(string path)
         {
-            File.WriteAllBytes(Path.Combine(path, name), content);
+            await File.WriteAllBytesAsync(Path.Combine(path, name), content);
         }
     }
 
