@@ -1,1 +1,1 @@
-# -Hackathon
+# -Hackathon (Орочьи технологии inc.)
