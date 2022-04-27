@@ -102,6 +102,8 @@ namespace WebAPI.Services
 
             return new StandartDocumentDTO()
             {
+                IonName = ionInfo.IonName,
+                Isotop = ionInfo.Isotope,
                 SessionNumber = entityID,
                 OrganizationName = dataEntity.Organization,
                 WorkName = string.Concat(entityID.ToString(), "-", timeEntity.SessionBegin.Year.ToString()),
@@ -134,6 +136,8 @@ namespace WebAPI.Services
 
             return new NonStandartDocumentDTO()
             {
+                IonName = ionInfo.IonName,
+                Isotop = ionInfo.Isotope,
                 SessionNumber = entityID,
                 OrganizationName = dataEntity.Organization,
                 WorkName = string.Concat(entityID.ToString(), "-", timeEntity.SessionBegin.Year.ToString()),

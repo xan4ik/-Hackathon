@@ -17,10 +17,6 @@ namespace CommandDLL
 
         protected void TryReplaceSring(string from, string to) 
         {
-            //if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(to))
-            //{
-            //    throw new Exception("Invalid document name");
-            //}
             if (builder is null) 
             {
                 throw new Exception("Template did't load");
@@ -41,6 +37,11 @@ namespace CommandDLL
 
         public IDocument CreateDocument()
         {
+            if (string.IsNullOrEmpty(documentName)) 
+            {
+                throw new Exception("Invalid document name");
+            }
+
             var documentContent = Pdf
                 .From(builder.ToString())
                 .OfSize(PaperSize.A4)
@@ -49,6 +50,7 @@ namespace CommandDLL
                 .Portrait()
                 .Comressed()
                 .Content();
+
             return new SimpleDocument(documentName, documentContent);
         }
     }

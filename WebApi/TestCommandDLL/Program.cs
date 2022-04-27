@@ -17,18 +17,17 @@ namespace TestCommandDLL
 
             using (var shell = new ApiShell())
             {
-                var builder = new AllowancePDFProtocolBuilder();
+                var builder = new NonStandartPDFProtocolBuilder();
 
                 shell.TrySignInAsync(profile).Wait();
-                var result1 = shell.GetAllowanceDocumentData(43).Result;
+                var result = shell.GetNonStandartDocumentData(43).Result;
 
-                builder.LoadTemplate(@"C:\Users\Lev\source\repos\-Hackathon\CommandDLL\html\allowance.html");
-                builder.SetPressure(result1.Pressure);
-                builder.SetUsedIon(result1.IonName, result1.Isotop);
-                builder.SetDocumentName("ass.pdf");
+                builder.LoadTemplate(@"C:\Users\Lev\source\repos\-Hackathon\CommandDLL\html\non_standard.html");
+                builder.SetContent(result);
+                builder.SetDocumentName("ass2.pdf");
                 var documet = builder.CreateDocument();
 
-                documet.Save(".");
+                documet.SaveAsync(".").Wait();
 
                 shell.TrySignOutAsync().Wait();
             }

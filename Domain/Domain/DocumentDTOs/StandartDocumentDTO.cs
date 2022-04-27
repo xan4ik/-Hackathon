@@ -6,6 +6,8 @@ namespace Domain.DocumentDTOs
 {
     public class StandartDocumentDTO
     {
+        public string IonName { get; set; }
+        public int Isotop { get; set; }
         public int SessionNumber { get; set; }
         public string OrganizationName { get; set; }
         public string WorkName { get; set; }
