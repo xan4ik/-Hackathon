@@ -17,10 +17,10 @@ namespace CommandDLL
 
         protected void TryReplaceSring(string from, string to) 
         {
-            if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(to))
-            {
-                throw new Exception("Invalid document name");
-            }
+            //if (string.IsNullOrEmpty(from) || string.IsNullOrEmpty(to))
+            //{
+            //    throw new Exception("Invalid document name");
+            //}
             if (builder is null) 
             {
                 throw new Exception("Template did't load");

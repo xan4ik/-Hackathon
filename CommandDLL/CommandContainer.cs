@@ -22,7 +22,8 @@ namespace CommandDLL
                 { "contracts_begin", new ContractsBeginsGetCommand() },
                 { "ion_names", new IonNamesGetCommand() },
                 { "session_count", new SessionCountGetCommand() },
-                { "email", new SendEmailCommand()}
+                { "email", new SendEmailCommand()},
+                { "document", new DoumentDataGetCommand()}
             };
         }
 
@@ -36,7 +37,7 @@ namespace CommandDLL
             commands.Add(key, command); 
         }
 
-        public T RequareCommand<T>(string name)
+        public T GetCommand<T>(string name)
         {
             if (commands.ContainsKey(name)) 
             {

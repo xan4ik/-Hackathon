@@ -8,26 +8,35 @@ namespace TestCommandDLL
     {
         static void Main(string[] args)
         {
-            //var profile = new UserProfile()
-            //{
-            //    Login = "BOT",
-            //    Password = "12345",
-            //    IsBot = true
-            //};
+            var profile = new UserProfile()
+            {
+                Login = "BOT",
+                Password = "12345",
+                IsBot = true
+            };
 
-            //using (var shell = new ApiShell()) 
-            //{
-            //    shell.TrySignInAsync(profile).Wait();
-            //    var result1 = shell.GetSessionCountAsync().Result;
+            using (var shell = new ApiShell())
+            {
+                var builder = new AllowancePDFProtocolBuilder();
 
-            //    var result2 = shell.GetSessionReportAsync(result1).Result;
+                shell.TrySignInAsync(profile).Wait();
+                var result1 = shell.GetAllowanceDocumentData(43).Result;
 
-            //    shell.TrySignOutAsync().Wait();
-            //    Console.ReadLine();
-            //}
+                builder.LoadTemplate(@"C:\Users\Lev\source\repos\-Hackathon\CommandDLL\html\allowance.html");
+                builder.SetPressure(result1.Pressure);
+                builder.SetUsedIon(result1.IonName, result1.Isotop);
+                builder.SetDocumentName("ass.pdf");
+                var documet = builder.CreateDocument();
 
-            var data = float.Parse("1,00E+07");
-            Console.WriteLine(data);
+                documet.Save(".");
+
+                shell.TrySignOutAsync().Wait();
+            }
+
+
+
+
+            Console.WriteLine();
 
             //var bulder = new NonStandardPDFProtocolBuilder();
             //bulder.LoadTemplate(@"C:\Users\Lev\source\repos\-Hackathon\CommandDLL\html\allowance.html");
