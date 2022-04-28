@@ -22,7 +22,7 @@ namespace TestCommandDLL
                 shell.TrySignInAsync(profile).Wait();
                 var result = shell.GetNonStandartDocumentData(43).Result;
 
-                builder.LoadTemplate(@"C:\Users\Lev\source\repos\-Hackathon\CommandDLL\html\non_standard.html");
+                builder.LoadTemplate(@"C:\Users\Stack\source\repos\-Hackathon\CommandDLL\html\non_standard.html");
                 builder.SetContent(result);
                 builder.SetDocumentName("ass2.pdf");
                 var documet = builder.CreateDocument();
