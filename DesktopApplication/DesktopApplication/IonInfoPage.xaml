@@ -19,23 +19,14 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0" Grid.Column="0"  Width="350" Height="50" Background="#EBE0FF" Content="Общее время с разбивуой по ионам" Click="ShowTotalTimeByIon">
+        <Button Grid.Row="0" Grid.Column="0"  Width="350" Height="50" Background="#EBE0FF" Content="Общее время с разбивуой по ионам" Click="ShowTotalTimeByIonAsync">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="15"/>
                 </Style>
             </Button.Resources>
-            <Button.Style>
-                <Style>
-                    <Style.Triggers>
-                        <Trigger Property="Button.IsMouseOver" Value="True">
-                            <Setter Property="Button.Background" Value="Red" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
         </Button>
-        <Button Grid.Row="0" Grid.Column="1"  Width="350" Height="50" Background="#EBE0FF" Content="Время начала работ по договору" Click="ShowContractsBegin" >
+        <Button Grid.Row="0" Grid.Column="1"  Width="350" Height="50" Background="#EBE0FF" Content="Время начала работ по договору" Click="ShowContractsBeginAsync" >
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="15"/>
