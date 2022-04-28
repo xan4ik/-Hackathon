@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DesktopApplication"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="500"
       Title="IonInfoPage">
 
     <Grid>
@@ -19,14 +19,14 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0" Grid.Column="0"  Width="350" Height="50" Background="#EBE0FF" Content="Общее время с разбивуой по ионам" Click="ShowTotalTimeByIonAsync">
+        <Button Grid.Row="0" Grid.Column="0"  Width="220" Height="50" Background="#EBE0FF" Content="Общее время с разбивуой по ионам" Click="ShowTotalTimeByIonAsync">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="15"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Grid.Row="0" Grid.Column="1"  Width="350" Height="50" Background="#EBE0FF" Content="Время начала работ по договору" Click="ShowContractsBeginAsync" >
+        <Button Grid.Row="0" Grid.Column="1"  Width="220" Height="50" Background="#EBE0FF" Content="Время начала работ по договору" Click="ShowContractsBeginAsync" >
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="15"/>
@@ -34,7 +34,7 @@
             </Button.Resources>
         </Button>
 
-        <TextBox x:Name="textBox" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="#F3F3F3">
+        <TextBox x:Name="textBox" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="#F3F3F3" >
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>

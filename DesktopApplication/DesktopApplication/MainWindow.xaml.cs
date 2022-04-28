@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommandDLL;
+using Domain.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,14 +22,37 @@ namespace DesktopApplication
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ApiShell shell = new ApiShell();
         public MainWindow()
         {
-            InitializeComponent();
+
+        }
+
+        private async void Auth(object sender, RoutedEventArgs e) 
+        {
+            UserProfile profile = new UserProfile()
+            {
+                Login = "Admin",
+                Password = "12345",
+                IsBot = false
+            };
+
+            await shell.TrySignInAsync(profile);
         }
 
         private void InfoButtonClick(object sender, RoutedEventArgs e)
         {
-            MainFrame.Content = new IonInfoPage(null);
+            MainFrame.Content = new ContractInfo(shell);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new IonInfoPage(shell);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new StatusPage(shell);
         }
     }
 }

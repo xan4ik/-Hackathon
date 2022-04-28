@@ -1,42 +1,41 @@
-﻿<Page x:Class="DesktopApplication.ContractInfo"
+﻿<Page x:Class="DesktopApplication.StatusPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DesktopApplication"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="660
-      "
-      Title="ContractInfo">
+      d:DesignHeight="459.597" d:DesignWidth="660"
+      Title="StatusPage">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="75" />
-            <RowDefinition Height="75" />
+            <RowDefinition Height="75"  />
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0" Grid.Column="0"  Width="200" Height="50" Background="#EBE0FF" Content="Тип, энергия и пробег в кремнии" Click="ShowIonInfoAsync">
+        <Button Grid.Row="0" Grid.Column="0"  Width="200" Height="50" Background="#EBE0FF" Content="Номер сеанса и его статус" Click="ShowSessionStatusAsync">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="15"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Grid.Row="0" Grid.Column="1"  Width="200" Height="50" Background="#EBE0FF" Content="Запланированное время работы на ионе" Click="ShowIonTimeWorkAsync" >
+        <Button Grid.Row="0" Grid.Column="1"  Width="200" Height="50" Background="#EBE0FF" Content="Время начала сеанса" Click="ShowSessionBeginAsync" >
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="15"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Grid.Row="0" Grid.Column="2"  Width="200" Height="50" Background="#EBE0FF" Content="Суммарное вревя на ТП" Click="GetTotalTBAsync" >
+        <Button Grid.Row="0" Grid.Column="2"  Width="200" Height="50" Background="#EBE0FF" Content="Номер договора" Click="DocumentInfo" >
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="15"/>
@@ -51,8 +50,7 @@
             </Button.Resources>
         </Button>
 
-        <TextBox x:Name="argsBox" Grid.Row="1" Grid.Column="0"  Grid.ColumnSpan="2" Height="60" Background="#F3F3F3" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  Margin="20,0,20,0"
-                 TextWrapping="Wrap">
+        <TextBox x:Name="argsBox" Grid.Row="1" Grid.Column="0"  Grid.ColumnSpan="2" Height="60" Background="#F3F3F3" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"  Margin="20,0,20,0" >
             <TextBox.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="10"/>

@@ -37,7 +37,7 @@
                     FontWeight="SemiBold" 
                     Foreground="White" 
                     BorderBrush="#FF6200EE" 
-                    HorizontalContentAlignment="Left"  />
+                    HorizontalContentAlignment="Left" Click="Button_Click"  />
 
             <Button Content="Информация по сеансу" HorizontalAlignment="Stretch"  
                     Height="36" 
@@ -47,7 +47,7 @@
                     FontWeight="SemiBold"
                     Foreground="White" 
                     BorderBrush="#FF6200EE" 
-                    HorizontalContentAlignment="Left" />
+                    HorizontalContentAlignment="Left" Click="Button_Click_1" />
 
             <Button Content="Генерация PDF" HorizontalAlignment="Stretch"   
                     Height="36" 
@@ -59,7 +59,18 @@
                     BorderBrush="#FF6200EE" 
                     HorizontalContentAlignment="Left">
             </Button>
+            <Button Content="Авторизоваться" HorizontalAlignment="Stretch"   
+                    Height="36" 
+                    Margin="10,0,0,0"
+                    Background="#FF6200EE" 
+                    FontFamily="Microsoft YaHei" 
+                    FontWeight="SemiBold" 
+                    Foreground="White" 
+                    BorderBrush="#FF6200EE" 
+                    HorizontalContentAlignment="Left"
+                    Click="Auth">
+            </Button>
         </StackPanel>
-        <Frame x:Name="MainFrame" Grid.Column="1" Margin="10,5,10,5" Grid.RowSpan="2" Background="Red" />
+        <Frame x:Name="MainFrame" Grid.Column="1" Margin="10,5,10,5" Grid.RowSpan="2"/>
     </Grid>
 </Window>
